@@ -4,6 +4,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
+const bcrypt = require('bcryptjs');
+// import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
+
 /*
 export default function HomeApp() {
   console.log('Hasta acá todo fue bien!')
@@ -47,8 +50,16 @@ const HomeScreen = () => {
       });
       const result = await supabase.from('users').select('*').eq('email', 'rullimaximoeduardo@gmail.com').single();
       setData(result.data);
-    };
+      try{
 
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync('password', salt);
+        const isSame = bcrypt.compareSync('password', hash);
+        console.log(isSame)
+        } catch(e) {
+          console.log({ e })
+        }
+    };
     fetchData();
   }, []);
 
