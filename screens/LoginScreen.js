@@ -19,8 +19,11 @@ const LoginScreen = ({navigation}) => {
     try {
       const result = await AuthLogin(email, password);
       if (result) {
-        // Navigate to the Home page if the user is properly logged in
-        navigation.navigate('Home');
+        // Reset the stack as the user just logged in
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home' }],
+        });
       }
     } catch (error) {
       // Raise error in case something fails in the backend
@@ -62,7 +65,7 @@ const LoginScreen = ({navigation}) => {
         <Text style={{color: 'blue'}}>Olvidaste la contraseña?</Text>
       </TouchableOpacity>
         
-        <Button title="Login" onPress={handleLogin} />
+        <Button title="Iniciar sesión" onPress={handleLogin} />
 
         <View
           style={{
