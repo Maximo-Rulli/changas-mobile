@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import WorkersScreen from './screens/WorkersScreen';
+import WorkersCategoriesScreen from './screens/WorkersCategoriesScreen';
 import ProposalsScreen from './screens/ProposalsScreen';
 import * as SecureStore from 'expo-secure-store';
 
@@ -14,16 +15,14 @@ function WorkersRoot() {
     <Stack.Navigator>
       <Stack.Screen
         name="WorkersCategories"
-        component={WorkersScreen}
+        component={WorkersCategoriesScreen}
         options={{title: 'Encuentre un trabajador'}}/>
-
-      <Stack.Navigator>
         <Stack.Screen
-          name="Homew"
-          component={HomeScreen}
-          options={{title: 'Bienvenido otra vez'}}/>
-      </Stack.Navigator>
-
+        name="Workers"
+        component={WorkersScreen}
+        initialParams={{ category: null }}
+        options={({ route }) => ({ title: `Buscando ${route.params.category}` })}
+        />
     </Stack.Navigator>
   );
 }
