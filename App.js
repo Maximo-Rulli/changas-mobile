@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import WorkersScreen from './screens/WorkersScreen';
-import WorkersCategoriesScreen from './screens/WorkersCategoriesScreen';
+import CategoriesScreen from './screens/CategoriesScreen';
 import ProposalsScreen from './screens/ProposalsScreen';
 import * as SecureStore from 'expo-secure-store';
 
@@ -15,13 +15,34 @@ function WorkersRoot() {
     <Stack.Navigator>
       <Stack.Screen
         name="WorkersCategories"
-        component={WorkersCategoriesScreen}
-        options={{title: 'Encuentre un trabajador'}}/>
+        component={CategoriesScreen}
+        initialParams={{ type: null }}
+        options={{title: 'Encontrar trabajador'}}
+        />
         <Stack.Screen
         name="Workers"
         component={WorkersScreen}
         initialParams={{ category: null }}
         options={({ route }) => ({ title: `Buscando ${route.params.category}` })}
+        />
+    </Stack.Navigator>
+  );
+}
+
+function ProposalsRoot() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="ProposalsCategories"
+        component={CategoriesScreen}
+        initialParams={{ type: null }}
+        options={{title: 'Encontrar trabajo'}}
+        />
+        <Stack.Screen
+        name="Proposals"
+        component={ProposalsScreen}
+        initialParams={{ category: null }}
+        options={({ route }) => ({ title: `Ofertas de ${route.params.category}` })}
         />
     </Stack.Navigator>
   );
@@ -70,8 +91,8 @@ const MyStack = () => {
           options={{ title: 'Encuentre un trabajador' }}
         />
         <Stack.Screen
-        name="ProposalsScreen"
-        component={ProposalsScreen}
+        name="ProposalsRoot"
+        component={ProposalsRoot}
         options={{title: 'Encuentre una oferta laboral'}}
         />
       </Stack.Navigator>

@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, Button } from 'react-native';
+import {Text, View, ScrollView } from 'react-native';
 import { getWorkers } from '../actions/getWorkers';
 
-const WorkersScreen = ({route, navigation}) => {
+const WorkersScreen = ({route}) => {
   const [workers, setWorkers] = useState(null)
   // Retrieve data from params
   const {category} = route.params
-  navigation.setParams({
-    category: category,
-  });
 
   useEffect(() => {
     async function loadWorkers (){
@@ -18,15 +15,14 @@ const WorkersScreen = ({route, navigation}) => {
   }, [])
 
   return (
-    <View>
-      <Text>Contratar</Text>
-      {workers && workers.map((worker, index) => (
-        <View key={index}>
-          <Text>Nombre: {worker.name}</Text>
+    <ScrollView>
+      {workers && workers.map((worker) => (
+        <View key={worker.id_worker}>
+          <Text>Nombre: {worker.username}</Text> 
           <Text>Cotización: {worker.hourly_price}</Text>
         </View>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 

@@ -1,24 +1,29 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, Button } from 'react-native';
-import { getCategories } from '../actions/getCategories';
+import {Text, View, ScrollView } from 'react-native';
+import { getProposals } from '../actions/getProposals';
+import formatDate from '../utils/formatDate';
 
-const ProposalsScreen = ({navigation}) => {
-  const [categories, setCategories] = useState(null)
+const ProposalsScreen = ({route}) => {
+  const [proposals, setProposals] = useState(null)
+  // Retrieve data from params
+  const {category} = route.params
 
   useEffect(() => {
-    async function loadCategories (){
-      setCategories(await getCategories()); 
+    async function loadProposals (){
+      setProposals(await getProposals(category)); 
     }
-    loadCategories();
+    loadProposals();
   }, [])
 
   return (
-    <View>
-      <Text>Encontrar trabajo</Text>
-      {categories && categories.map((category, index) => (
-        <Text key={index}>{category.name}</Text>
+    <ScrollView>
+      {proposals && proposals.map((proposal) => (
+        <View key={proposal.id_proposal}>
+          <Text>Fecha: {formatDate(proposal.open_date.slice(0, 10))}</Text> 
+          <Text>Cotización: ${proposal.budget}</Text>
+        </View>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 

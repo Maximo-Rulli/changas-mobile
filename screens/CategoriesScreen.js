@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, Button } from 'react-native';
+import {Text, View, Button, ScrollView } from 'react-native';
 import { getCategories } from '../actions/getCategories';
 
-const WorkersCategoriesScreen = ({navigation}) => {
+const CategoriesScreen = ({route, navigation}) => {
   const [categories, setCategories] = useState(null)
-
+  // Retrieve data from params
+  const {type} = route.params
+  console.log(type)
   useEffect(() => {
     async function loadCategories (){
       setCategories(await getCategories()); 
@@ -13,19 +15,20 @@ const WorkersCategoriesScreen = ({navigation}) => {
   }, [])
 
   return (
-    <View>
+    <ScrollView>
       <Text>Contratar</Text>
       {categories && categories.map((category, index) => (
         <View key={index}>
           <Text>{category.name}</Text>
           <Button
       title={`Encontrar ${category.name}`}
-      onPress={() => navigation.navigate('Workers', {category: category.name})}/>
+      onPress={() => {type === 'trabajador' ? navigation.navigate('Workers', {category: category.name})
+    : navigation.navigate('Proposals', {category: category.name})}}/>
         </View>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 
 
-export default WorkersCategoriesScreen;
+export default CategoriesScreen;

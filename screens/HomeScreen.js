@@ -24,10 +24,12 @@ const HomeScreen = ({navigation}) => {
         <Button title="Cerrar sesión" onPress={() => Logout({navigation})} />
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Encontrar trabajo" onPress={() => {navigation.navigate('ProposalsCategories')}} />
+        <Button title="Encontrar trabajo" onPress={() => {navigation.navigate('ProposalsRoot', { screen: 'ProposalsCategories', 
+        params: {type: 'propuesta'} })}} />
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Encontrar proveedor" onPress={() => {navigation.navigate('WorkersRoot')}} />
+        <Button title="Encontrar proveedor" onPress={() => {navigation.navigate('WorkersRoot', { screen: 'WorkersCategories',
+          params: {type: 'trabajador'} })}} />
       </View>
     </View>
   );
