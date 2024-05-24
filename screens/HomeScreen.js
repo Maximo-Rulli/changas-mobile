@@ -1,7 +1,6 @@
 import React from 'react';
 import {Text, View, Button, StyleSheet } from 'react-native';
 import useFetchUser from '../hooks/useFetchUser';
-import Logout from '../actions/logout';
 
 const HomeScreen = ({navigation}) => {
   const {username} = useFetchUser();
