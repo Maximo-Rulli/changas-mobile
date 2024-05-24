@@ -1,22 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Text, View, Button, StyleSheet } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
+import useFetchUser from '../hooks/useFetchUser';
 import Logout from '../actions/logout';
 
 const HomeScreen = ({navigation}) => {
-  const [username, setUsername] = useState('')
-
-  useEffect(() => {
-    async function checkUser (){
-      try {
-        setUsername(await SecureStore.getItemAsync('username'));
-      }
-      catch (e) {
-        Alert.alert('Error', 'Error al recuperar el nombre de usuario');
-      }
-    }
-    checkUser();
-  }, [])
+  const {username} = useFetchUser();
 
   return (
     <View>

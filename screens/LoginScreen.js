@@ -22,7 +22,7 @@ const LoginScreen = ({navigation}) => {
         // Reset the stack as the user just logged in
         navigation.reset({
           index: 0,
-          routes: [{ name: 'Home' }],
+          routes: [{ name: 'Logged' }],
         });
       }
     } catch (error) {

@@ -7,6 +7,7 @@ import LoginScreen from './screens/LoginScreen';
 import WorkersScreen from './screens/WorkersScreen';
 import CategoriesScreen from './screens/CategoriesScreen';
 import ProposalsScreen from './screens/ProposalsScreen';
+import ProfileScreen from './screens/ProfileScreen';
 import * as SecureStore from 'expo-secure-store';
 
 const Stack = createNativeStackNavigator();
@@ -67,6 +68,11 @@ function TabNavigator() {
         name="ProposalsRoot"
         component={ProposalsRoot}
         options={{title: 'Ofertas', headerShown: false}}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{title: 'Perfil', headerShown: true}}
       />
     </Tab.Navigator>
   );
