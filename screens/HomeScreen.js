@@ -17,19 +17,18 @@ const HomeScreen = ({navigation}) => {
     }
     checkUser();
   }, [])
+
   return (
     <View>
-      <Text>Bienvenido a Changas {username}!</Text>
+      <Text>  Bienvenido a Changas {username}!</Text>
       <View style={styles.buttonContainer}>
         <Button title="Cerrar sesión" onPress={() => Logout({navigation})} />
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Encontrar trabajo" onPress={() => {navigation.navigate('ProposalsRoot', { screen: 'ProposalsCategories', 
-        params: {type: 'propuesta'} })}} />
+        <Button title="Encontrar trabajo" onPress={() => {navigation.navigate('ProposalsRoot', { screen: 'ProposalsCategories' })}} />
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Encontrar proveedor" onPress={() => {navigation.navigate('WorkersRoot', { screen: 'WorkersCategories',
-          params: {type: 'trabajador'} })}} />
+        <Button title="Encontrar proveedor" onPress={() => {navigation.navigate('WorkersRoot', { screen: 'WorkersCategories' })}} />
       </View>
     </View>
   );

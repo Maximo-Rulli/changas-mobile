@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import WorkersScreen from './screens/WorkersScreen';
@@ -9,6 +10,7 @@ import ProposalsScreen from './screens/ProposalsScreen';
 import * as SecureStore from 'expo-secure-store';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 function WorkersRoot() {
   return (
@@ -16,7 +18,7 @@ function WorkersRoot() {
       <Stack.Screen
         name="WorkersCategories"
         component={CategoriesScreen}
-        initialParams={{ type: null }}
+        initialParams={{ type: 'trabajador' }}
         options={{title: 'Encontrar trabajador'}}
         />
         <Stack.Screen
@@ -35,7 +37,7 @@ function ProposalsRoot() {
       <Stack.Screen
         name="ProposalsCategories"
         component={CategoriesScreen}
-        initialParams={{ type: null }}
+        initialParams={{ type: 'propuesta' }}
         options={{title: 'Encontrar trabajo'}}
         />
         <Stack.Screen
@@ -48,8 +50,60 @@ function ProposalsRoot() {
   );
 }
 
+function TabNavigator() {
+  return (
+    <Tab.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{title: 'Bienvenido'}}
+      />
+      <Tab.Screen
+        name="WorkersRoot"
+        component={WorkersRoot}
+        options={{ title: 'Trabajadores', headerShown: false}}
+      />
+      <Tab.Screen
+        name="ProposalsRoot"
+        component={ProposalsRoot}
+        options={{title: 'Ofertas', headerShown: false}}
+      />
+    </Tab.Navigator>
+  );
+}
 
-const MyStack = () => {
+
+function DefaultStack(username, id_user) {
+  return (
+    <Stack.Navigator>
+      {username && id_user ? //If the user is not logged in its data aren't present
+        <Stack.Screen
+          name="DefaultLogged"
+          component={TabNavigator}
+          options={{headerShown: false}}
+        />  
+        : 
+        <Stack.Screen
+          name="DefaultLogin"
+          component={LoginScreen}
+          options={{title: 'Inicie sesión'}}
+        />
+      }
+      <Stack.Screen
+        name="Logged"
+        component={TabNavigator}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{title: 'Inicie sesión'}}
+      />
+    </Stack.Navigator>
+  );
+}
+
+const App = () => {
   const [username, setUsername] = useState(null)
   const [id_user, setId_user] = useState(null)
 
@@ -63,41 +117,9 @@ const MyStack = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        {username && id_user ? //If the user is not logged in its data aren't present
-        <Stack.Screen
-        name="DefaultHome"
-        component={HomeScreen}
-        options={{title: 'Bienvenido'}}/>  
-        : 
-        <Stack.Screen
-        name="DefaultLogin"
-        component={LoginScreen}
-        options={{title: 'Inicie sesión'}}/>
-        }
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{title: 'Bienvenido'}}
-        />
-        <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{title: 'Inicie sesión'}}
-        />
-        <Stack.Screen
-          name="WorkersRoot"
-          component={WorkersRoot}
-          options={{ title: 'Encuentre un trabajador' }}
-        />
-        <Stack.Screen
-        name="ProposalsRoot"
-        component={ProposalsRoot}
-        options={{title: 'Encuentre una oferta laboral'}}
-        />
-      </Stack.Navigator>
+      {DefaultStack(username, id_user)}
     </NavigationContainer>
   );
 };
 
-export default MyStack;
+export default App;

@@ -16,7 +16,6 @@ const CategoriesScreen = ({route, navigation}) => {
 
   return (
     <ScrollView>
-      <Text>Contratar</Text>
       {categories && categories.map((category, index) => (
         <View key={index}>
           <Text>{category.name}</Text>
