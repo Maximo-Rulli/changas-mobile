@@ -6,7 +6,7 @@ const CategoriesScreen = ({route, navigation}) => {
   const [categories, setCategories] = useState(null)
   // Retrieve data from params
   const {type} = route.params
-  console.log(type)
+
   useEffect(() => {
     async function loadCategories (){
       setCategories(await getCategories()); 
