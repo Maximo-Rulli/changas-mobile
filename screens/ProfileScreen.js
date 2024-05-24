@@ -12,6 +12,12 @@ const ProfileScreen = ({navigation}) => {
       <View style={styles.buttonContainer}>
         <Button title="Cerrar sesión" onPress={() => Logout({navigation})} />
       </View>
+      <Text>  Bienvenido a tu perfil {username}!</Text>
+      <Text>  Bienvenido a tu perfil {username}!</Text>
+      <Text>  Bienvenido a tu perfil {username}!</Text>
+      <Text>  Bienvenido a tu perfil {username}!</Text>
+      <Text>  Bienvenido a tu perfil {username}!</Text>
+      
     </View>
   );
 };

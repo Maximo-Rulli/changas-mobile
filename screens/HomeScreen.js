@@ -10,9 +10,6 @@ const HomeScreen = ({navigation}) => {
     <View>
       <Text>  Bienvenido a Changas {username}!</Text>
       <View style={styles.buttonContainer}>
-        <Button title="Cerrar sesión" onPress={() => Logout({navigation})} />
-      </View>
-      <View style={styles.buttonContainer}>
         <Button title="Encontrar trabajo" onPress={() => {navigation.navigate('ProposalsRoot', { screen: 'ProposalsCategories' })}} />
       </View>
       <View style={styles.buttonContainer}>
