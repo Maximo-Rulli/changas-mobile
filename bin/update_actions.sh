@@ -8,8 +8,8 @@ cd ..
 # Remove the existing content of the subfolder
 rm -rf $TARGET_DIR
 
-# Clone the updated subtree repository into the target subfolder
-git clone $REPO_URL $TARGET_DIR
+# The only way to update is to copy the subtree again
+git subtree add --prefix=$TARGET_DIR  $REPO_URL main --squash
 
 # Commit the changes
 git add $TARGET_DIR
