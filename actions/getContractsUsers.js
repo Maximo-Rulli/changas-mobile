@@ -1,4 +1,4 @@
-import supabase from '@/libs/supabase/server'
+import supabase from '../libs/supabase/server'
 
 export async function getContractsUsers (IdUser, OtherUser) {
   const { data: contracts } = await supabase.from('contracts').select()

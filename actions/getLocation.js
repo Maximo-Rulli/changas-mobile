@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { NextResponse } from 'next/server'
-import messages from '@/utils/messages'
+import messages from '../utils/messages'
 
 export async function getLocation (city, province, country, complete) {
   const location = city + ', ' + province + ', ' + country

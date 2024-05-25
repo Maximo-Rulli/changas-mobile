@@ -1,4 +1,4 @@
-import supabase from '@/libs/supabase/server'
+import supabase from '../libs/supabase/server'
 
 export async function getExistingChat (IdUser1, IdUser2) {
   const { data: IdChat, count } = await supabase.from('chats').select('id_chat', { count: 'exact' }).or(

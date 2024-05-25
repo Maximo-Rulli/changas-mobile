@@ -1,4 +1,4 @@
-import supabase from '@/libs/supabase/server'
+import supabase from '../libs/supabase/server'
 
 export async function getRatings (IdUser, jobs) {
   if (jobs === null) return null

@@ -1,4 +1,4 @@
-import supabase from '@/libs/supabase/server'
+import supabase from '../libs/supabase/server'
 
 export async function getWorkerRatings (IdUser, category) {
   const { data: ratings } = await supabase.from('reviews').select('score, date, description')

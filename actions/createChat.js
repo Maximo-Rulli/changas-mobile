@@ -1,4 +1,4 @@
-import supabase from '@/libs/supabase/server'
+import supabase from '../libs/supabase/server'
 
 export async function createChat (message, IdUser1, IdUser2, Username1, Username2) {
   // Create JSON to upload

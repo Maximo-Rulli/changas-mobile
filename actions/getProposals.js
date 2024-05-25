@@ -1,5 +1,5 @@
-import supabase from '@/libs/supabase/server'
-import { RESULTS_PER_PAGE } from '@/constants'
+import supabase from '../libs/supabase/server'
+import { RESULTS_PER_PAGE } from '../constants'
 
 export async function getProposals (Category, page) {
   // We set an upper and lower bound of the results to be shown

@@ -1,4 +1,4 @@
-import supabase from '@/libs/supabase/server'
+import supabase from '../libs/supabase/server'
 import { getMessages } from '@/actions/getMessages'
 import Pusher from 'pusher'
 

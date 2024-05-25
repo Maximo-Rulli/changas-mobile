@@ -1,6 +1,6 @@
-import supabase from '../libs/supabase/server';
-import bcrypt from '../bcryptSetup';
-import messages from '../utils/messages';
+import supabase from '../../libs/supabase/server';
+import bcrypt from '../../bcryptSetup';
+import messages from '../../utils/messages';
 import * as SecureStore from 'expo-secure-store';
 
 export default async function AuthLogin(email, password){
