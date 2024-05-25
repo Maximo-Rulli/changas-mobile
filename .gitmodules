@@ -1,6 +1,3 @@
-[submodule "actions2"]
-	path = actions2
-	url = https://github.com/Maximo-Rulli/actions-test
 [submodule "actions"]
 	path = actions
 	url = https://github.com/Maximo-Rulli/changas-actions
