@@ -9,7 +9,7 @@ import {
   Linking,
   Alert
 } from 'react-native';
-import AuthLogin from '../actions/mobile-auth/login';
+import AuthLogin from '../actions/login';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');

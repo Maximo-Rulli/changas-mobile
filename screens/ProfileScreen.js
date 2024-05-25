@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View, Button, StyleSheet } from 'react-native';
 import useFetchUser from '../hooks/useFetchUser';
-import Logout from '../actions/mobile-auth/logout';
+import Logout from '../actions/logout';
 
 const ProfileScreen = ({navigation}) => {
   const {username, id_user} = useFetchUser();
