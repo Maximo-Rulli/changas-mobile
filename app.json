@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "changas-mobile",
-    "slug": "changas-mobile",
+    "name": "Changas",
+    "slug": "Changas",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
