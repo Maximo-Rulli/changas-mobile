@@ -1,5 +1,5 @@
 import supabase from '@/libs/supabase/server'
-// Fake comments
+
 export async function createChat (message, IdUser1, IdUser2, Username1, Username2) {
   // Create JSON to upload
   const newChat = {
