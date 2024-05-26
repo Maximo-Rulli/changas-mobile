@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Changas",
-    "slug": "Changas",
+    "slug": "changas-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -31,6 +31,7 @@
       "eas": {
         "projectId": "21acf521-2864-47ff-a5bf-9bedf53997c2"
       }
-    }
+    },
+    "owner": "changas"
   }
 }
