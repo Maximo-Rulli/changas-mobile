@@ -11,7 +11,8 @@ const WorkersScreen = ({ route }) => {
 
   useEffect(() => {
     async function loadWorkers() {
-      const fetchedWorkers = await getWorkers(category);
+      const columns = 'username, hourly_price, location, score, employees, description, attention_hours'
+      const fetchedWorkers = await getWorkers(category, columns);
       setWorkers(fetchedWorkers);
       setLoading(false);
     }
@@ -28,10 +29,15 @@ const WorkersScreen = ({ route }) => {
 
   return (
     <ScrollView>
-      {workers && workers.map((worker) => (
-        <View key={worker.id_worker}>
+      {workers && workers.map((worker, index) => (
+        <View key={index}>
           <Text>Nombre: {worker.username}</Text> 
-          <Text>Cotización: {worker.hourly_price}</Text>
+          <Text>Cotización: ${worker.hourly_price}/h</Text> 
+          <Text>Ubicación: {worker.location}</Text>
+          <Text>N° de empleados: {worker.employees}</Text>
+          <Text>Horas de atención: {worker.attention_hours}</Text>
+          <Text>Descripción: {worker.description}</Text>
+          <Text>Puntaje: {worker.score}/5</Text>
         </View>
       ))}
     </ScrollView>

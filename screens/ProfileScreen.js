@@ -17,10 +17,13 @@ const ProfileScreen = ({ navigation }) => {
   useEffect(() => {
     async function loadUserData() {
       if (id_user) {
-        const fetchedUser = await getUser(id_user);
+        const user_columns = 'email, phone, location, birth, dni'
+        const fetchedUser = await getUser(id_user, user_columns);
         setUser(fetchedUser || { email: null, phone: null, location: null, birth: null, dni: null });
-        setProposals(await getOffers(id_user));
-        setJobs(await getJobs(id_user));
+        const proposals_columns = 'category, budget, open_date, location, description';
+        const workers_columns = 'category, hourly_price, attention_hours, score, location, employees, description';
+        setProposals(await getOffers(id_user, proposals_columns));
+        setJobs(await getJobs(id_user, workers_columns));
         setLoading(false);
       }
     }
@@ -44,7 +47,7 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.cardContainer}>
         {jobs.length === 0
           ? <Text>No has subido trabajos</Text>
-          : jobs.map(job => <JobCard key={job.id_worker} job={job} navigation={navigation} />)
+          : jobs.map((job, index) => <JobCard key={index} job={job} navigation={navigation} />)
         }
       </View>
 
@@ -52,7 +55,7 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.cardContainer}>
         {proposals.length === 0
           ? <Text>No has publicado ofertas laborales</Text>
-          : proposals.map(proposal => <ProposalCard key={proposal.id_proposal} proposal={proposal} />)
+          : proposals.map((proposal, index) => <ProposalCard key={index} proposal={proposal} />)
         }
       </View>
 

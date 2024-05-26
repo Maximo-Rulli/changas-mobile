@@ -12,7 +12,8 @@ const ProposalsScreen = ({ route }) => {
 
   useEffect(() => {
     async function loadProposals() {
-      const fetchedProposals = await getProposals(category, 0);
+      const columns = 'budget, open_date, location, description'
+      const fetchedProposals = await getProposals(category, 0, columns);
       setProposals(fetchedProposals);
       setLoading(false);
     }
@@ -29,12 +30,20 @@ const ProposalsScreen = ({ route }) => {
 
   return (
     <ScrollView>
-      {proposals && proposals.map((proposal) => (
-        <View key={proposal.id_proposal}>
+      {proposals ? (proposals.map((proposal, index) => (
+        <View key={index}>
+          <Text>Presupuesto: ${proposal.budget}</Text>
+          <Text>Ubicación: {proposal.location}</Text>
           <Text>Fecha: {formatDate(proposal.open_date.slice(0, 10))}</Text> 
-          <Text>Cotización: ${proposal.budget}</Text>
+          <Text>Descripción: {proposal.description}</Text> 
         </View>
-      ))}
+      )))
+      : (
+        <View>
+          <Text>No hay ninguna oferta de {category}</Text> 
+        </View>
+      )
+    }
     </ScrollView>
   );
 };

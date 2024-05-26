@@ -22,7 +22,7 @@ export default async function AuthLogin(email, password){
             // Save the data to secure store
             await SecureStore.setItemAsync('id_user', data.id_user);
             await SecureStore.setItemAsync('username', username);
-            return true;
+            return [data.id_user, username];
         }
         else {
             throw new Error(messages.error.error);

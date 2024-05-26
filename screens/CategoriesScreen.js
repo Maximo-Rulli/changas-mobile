@@ -11,7 +11,8 @@ const CategoriesScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     async function loadCategories() {
-      const fetchedCategories = await getCategories();
+      const columns = 'name, id'
+      const fetchedCategories = await getCategories(columns);
       setCategories(fetchedCategories);
       setLoading(false);
     }

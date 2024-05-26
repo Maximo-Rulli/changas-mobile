@@ -121,6 +121,7 @@ function DefaultStack(username, id_user) {
       <Stack.Screen
         name="Logged"
         component={TabNavigator}
+        initialParams={{id_user:null, username:null}}
         options={{headerShown: false}}
       />
       <Stack.Screen
