@@ -44,7 +44,7 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.cardContainer}>
         {jobs.length === 0
           ? <Text>No has subido trabajos</Text>
-          : jobs.map(job => <JobCard key={job.id} job={job} />)
+          : jobs.map(job => <JobCard key={job.id_worker} job={job} navigation={navigation} />)
         }
       </View>
 
@@ -52,7 +52,7 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.cardContainer}>
         {proposals.length === 0
           ? <Text>No has publicado ofertas laborales</Text>
-          : proposals.map(proposal => <ProposalCard key={proposal.id} proposal={proposal} />)
+          : proposals.map(proposal => <ProposalCard key={proposal.id_proposal} proposal={proposal} />)
         }
       </View>
 
@@ -73,7 +73,7 @@ const ProfileCard = ({ user }) => (
   </View>
 );
 
-const JobCard = ({ job }) => (
+const JobCard = ({ job, navigation }) => (
   <View style={styles.card}>
     <Text>Nombre del oficio: {job.category}</Text>
     <Text>Precio por hora: ${job.hourly_price}</Text>
@@ -82,6 +82,9 @@ const JobCard = ({ job }) => (
     <Text>Horas de atención: {job.attention_hours}</Text>
     <Text>Descripción: {job.description}</Text>
     <Text>Puntaje: {job.score}/5</Text>
+    <View style={styles.buttonContainer}>
+        <Button title="Reseñas" onPress={() => navigation.navigate('Reviews', { category: job.category })} />
+    </View>
   </View>
 );
 

@@ -8,6 +8,7 @@ import WorkersScreen from './screens/WorkersScreen';
 import CategoriesScreen from './screens/CategoriesScreen';
 import ProposalsScreen from './screens/ProposalsScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import ReviewsScreen from './screens/ReviewsScreen';
 import * as SecureStore from 'expo-secure-store';
 
 const Stack = createNativeStackNavigator();
@@ -51,7 +52,27 @@ function ProposalsRoot() {
   );
 }
 
-function TabNavigator() {
+function ProfileRoot({route}) {
+  const {id_user} = route.params
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{title: 'Perfil'}}
+        />
+        <Stack.Screen
+        name="Reviews"
+        component={ReviewsScreen}
+        initialParams={{ category: null, id_user}}
+        options={({ route }) => ({ title: `Reseñas de ${route.params.category}` })}
+        />
+    </Stack.Navigator>
+  );
+}
+
+function TabNavigator({route}) {
+  const {id_user, username} = route.params
   return (
     <Tab.Navigator>
       <Stack.Screen
@@ -70,9 +91,10 @@ function TabNavigator() {
         options={{title: 'Ofertas', headerShown: false}}
       />
       <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{title: 'Perfil', headerShown: true}}
+        name="ProfileRoot"
+        component={ProfileRoot}
+        initialParams={{id_user}}
+        options={{title: 'Perfil', headerShown: false}}
       />
     </Tab.Navigator>
   );
@@ -82,10 +104,11 @@ function TabNavigator() {
 function DefaultStack(username, id_user) {
   return (
     <Stack.Navigator>
-      {username && id_user ? //If the user is not logged in its data aren't present
+      {username && id_user ? //If the user is not logged in, its data aren't present
         <Stack.Screen
           name="DefaultLogged"
           component={TabNavigator}
+          initialParams={{id_user, username}}
           options={{headerShown: false}}
         />  
         : 
