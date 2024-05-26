@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Changas",
-    "slug": "changas-mobile",
+    "slug": "Changas",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,7 +16,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.changas.changasmobile"
@@ -27,11 +27,11 @@
     "plugins": [
       "expo-secure-store"
     ],
+    "owner": "changas",
     "extra": {
       "eas": {
-        "projectId": "21acf521-2864-47ff-a5bf-9bedf53997c2"
+        "projectId": "78361d4a-48b2-4408-87ef-74936fca8986"
       }
-    },
-    "owner": "changas"
+    }
   }
 }
