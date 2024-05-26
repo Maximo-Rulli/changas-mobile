@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView, ActivityIndicator } from 'react-native';
+import { Text, View, ScrollView, ActivityIndicator, StyleSheet  } from 'react-native';
 import { getProposals } from '../actions/getProposals';
 import formatDate from '../utils/formatDate';
 
@@ -29,23 +29,72 @@ const ProposalsScreen = ({ route }) => {
   }
 
   return (
-    <ScrollView>
-      {proposals ? (proposals.map((proposal, index) => (
-        <View key={index}>
-          <Text>Presupuesto: ${proposal.budget}</Text>
-          <Text>Ubicación: {proposal.location}</Text>
-          <Text>Fecha: {formatDate(proposal.open_date.slice(0, 10))}</Text> 
-          <Text>Descripción: {proposal.description}</Text> 
+    <ScrollView style={styles.container}>
+      {proposals ? (
+        proposals.map((proposal, index) => (
+          <View key={index} style={styles.card}>
+            <Text style={styles.label}>Presupuesto:</Text>
+            <Text style={styles.value}>${proposal.budget}</Text>
+            
+            <Text style={styles.label}>Ubicación:</Text>
+            <Text style={styles.value}>{proposal.location}</Text>
+            
+            <Text style={styles.label}>Fecha:</Text>
+            <Text style={styles.value}>{formatDate(proposal.open_date.slice(0, 10))}</Text>
+            
+            <Text style={styles.label}>Descripción:</Text>
+            <Text style={styles.value}>{proposal.description}</Text>
+          </View>
+        ))
+      ) : (
+        <View style={styles.noData}>
+          <Text style={styles.noDataText}>No hay ninguna oferta de {category}</Text>
         </View>
-      )))
-      : (
-        <View>
-          <Text>No hay ninguna oferta de {category}</Text> 
-        </View>
-      )
-    }
+      )}
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#f8f9fa',
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  label: {
+    fontSize: 14,
+    color: '#6c757d',
+    marginBottom: 4,
+  },
+  value: {
+    fontSize: 16,
+    color: '#212529',
+    marginBottom: 8,
+  },
+  noData: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+  noDataText: {
+    fontSize: 16,
+    color: '#6c757d',
+  },
+});
 
 export default ProposalsScreen;
