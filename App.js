@@ -9,6 +9,7 @@ import CategoriesScreen from './screens/CategoriesScreen';
 import ProposalsScreen from './screens/ProposalsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ReviewsScreen from './screens/ReviewsScreen';
+import RegisterScreen from './screens/RegisterScreen';
 import * as SecureStore from 'expo-secure-store';
 
 const Stack = createNativeStackNavigator();
@@ -128,6 +129,11 @@ function DefaultStack(username, id_user) {
         name="Login"
         component={LoginScreen}
         options={{title: 'Inicie sesión'}}
+      />
+      <Stack.Screen
+        name="Register"
+        component={RegisterScreen}
+        options={{title: 'Registrarse'}}
       />
     </Stack.Navigator>
   );

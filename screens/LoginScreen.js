@@ -75,8 +75,8 @@ const LoginScreen = ({navigation}) => {
             justifyContent: 'center',
             marginBottom: 30,
           }}>
-          <Text>Nuevo en la plataforma?</Text>
-          <TouchableOpacity onPress={() => Linking.openURL('https://www.changas.site/auth/signup')}>
+          <Text>¿Nuevo en la plataforma?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
             <Text style={{color: '#AD40AF', fontWeight: '700'}}> Regístrate</Text>
           </TouchableOpacity>
         </View>
