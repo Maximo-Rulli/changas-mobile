@@ -25,7 +25,8 @@ const messages = {
     not_user_turn: 'No es tu turno de contraofertar',
     failed_close_contract: 'Ocurrió un error al cerrar el contrato',
     failed_reject_contract: 'Ocurrió un error al rechazar el contrato',
-    failed_worker_fetch: 'Ocurrió un error al buscar un trabajador con los parámetros enviados',
+    failed_worker_fetch: 'Ocurrió un error al buscar trabajadores',
+    failed_proposal_fetch: 'Ocurrió un error al buscar las ofertas laborales',
     failed_user_update: 'Ocurrió un error al actualizar la información del usuario',
     failed_worker_update: 'Ocurrió un error al actualizar la información del trabajo',
     failed_proposal_update: 'Ocurrió un error al actualizar la información de la oferta'

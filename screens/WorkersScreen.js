@@ -1,23 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView, ActivityIndicator, StyleSheet } from 'react-native';
-import { getWorkers } from '../actions/getWorkers';
+import {Text, View, ScrollView, ActivityIndicator, StyleSheet, Alert, Button} from 'react-native';
+import messages from '../utils/messages';
+import { RESULTS_PER_PAGE } from '../constants'
 
 const WorkersScreen = ({ route }) => {
   const [workers, setWorkers] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
   
   // Retrieve data from params
   const { category } = route.params;
 
   useEffect(() => {
     async function loadWorkers() {
-      const columns = 'username, hourly_price, location, score, employees, description, attention_hours'
-      const fetchedWorkers = await getWorkers(category, columns);
-      setWorkers(fetchedWorkers);
+      setLoading(true);
+      const query = `category=${category}&page=${page}&country=undefined&province=undefined&city=undefined&distance=undefined&hourly_price=undefined&employees=undefined&score=undefined&name=undefined`
+      const response = await fetch(`https://www.changas.site/api/filters/get-workers?${query}`);
+      const fetchedData = await response.json();
+      if (fetchedData.error) {
+        Alert.alert(messages.error.failed_worker_fetch);
+        setWorkers([]);
+      }
+      else {
+        setWorkers(fetchedData.workers);
+      }
       setLoading(false);
     }
     loadWorkers();
-  }, [category]);
+  }, [category, page]);
 
   if (loading) {
     return (
@@ -29,7 +39,7 @@ const WorkersScreen = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
-      {workers ? (
+      {(workers.length !== 0) ? (
         workers.map((worker, index) => (
           <View key={index} style={styles.card}>
             <Text style={styles.label}>Nombre:</Text>
@@ -59,6 +69,10 @@ const WorkersScreen = ({ route }) => {
           <Text style={styles.noDataText}>No hay trabajadores disponibles</Text>
         </View>
       )}
+      <View style={styles.pagination}>
+        {Number(page) > 0 ? <Button title='&lt;' onPress={() => setPage(Number(page) - 1)}/> : undefined}
+        {workers.length === RESULTS_PER_PAGE ? <Button title='&gt;' onPress={() => setPage(Number(page) + 1)}/> : undefined}
+      </View>
     </ScrollView>
   );
 };
@@ -102,6 +116,12 @@ const styles = StyleSheet.create({
   noDataText: {
     fontSize: 16,
     color: '#6c757d',
+  },
+  pagination: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    marginBottom: 30,
   },
 });
 

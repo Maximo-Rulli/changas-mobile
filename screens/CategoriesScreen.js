@@ -33,7 +33,7 @@ const CategoriesScreen = ({ route, navigation }) => {
         <View key={index}>
           <Text>{category.name}</Text>
           <Button
-            title={`Encontrar ${category.name}`}
+            title={`Encontrar ${type === 'trabajador' ? '' : 'ofertas de '}${category.name}`}
             onPress={() => {
               type === 'trabajador'
                 ? navigation.navigate('Workers', { category: category.name })
