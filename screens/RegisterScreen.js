@@ -49,32 +49,58 @@ const RegisterScreen = ({navigation}) => {
       if (text === '' || (text.length <= 2 && parseInt(text, 10) >= 1 && parseInt(text, 10) <= 31)) {
         setDay(text);
         setError('');
+      } else if (text === '0'){
+        setDay('');
+        setError('');
       } else {
         setError('Invalid day');
       }
     }
   };
 
+  const handleDayBlur = () => {
+    if (day.length === 1) {
+      setDay(`0${day}`);
+    }
+  };
+
+
   const handleMonthChange = (text) => {
     if (/^\d{0,2}$/.test(text)) {
       if (text === '' || (text.length <= 2 && parseInt(text, 10) >= 1 && parseInt(text, 10) <= 12)) {
         setMonth(text);
         setError('');
-      } else {
+      } 
+      else if (text === '0'){
+        setMonth('');
+        setError('');
+      }
+      else {
         setError('Invalid month');
       }
     }
   };
 
+  const handleMonthBlur = () => {
+    if (month.length === 1) {
+      setMonth(`0${month}`);
+    }
+  };
+
   const handleYearChange = (text) => {
-    if (/^\d{0,4}$/.test(text)) {
+    /*if (/^\d{0,4}$/.test(text)) {
       if (text === '' || (text.length === 4 && parseInt(text, 10) >= 1900 && parseInt(text, 10) <= 2100)) {
         setYear(text);
         setError('');
       } else {
         setError('Invalid year');
       }
-    }
+    }*/
+    setYear(text);
+  };
+
+  const handleYearBlur = () => {
+    console.log(parseInt(year, 10))
   };
 
 
@@ -99,6 +125,7 @@ const RegisterScreen = ({navigation}) => {
         keyboardType="email-address"
         placeholder="Ingresa el mail"
         onChangeText={text => setEmail(text)}
+        maxLength={40}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
@@ -107,6 +134,7 @@ const RegisterScreen = ({navigation}) => {
         label='password'
         placeholder="Ingresa la contraseña"
         onChangeText={text => setPassword(text)}
+        maxLength={30}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
@@ -116,6 +144,7 @@ const RegisterScreen = ({navigation}) => {
         autoComplete='name'
         placeholder="Ingresa tu nombre"
         onChangeText={text => setName(text)}
+        maxLength={40}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
@@ -125,6 +154,7 @@ const RegisterScreen = ({navigation}) => {
         autoComplete='family-name'
         placeholder="Ingresa tu apellido"
         onChangeText={text => setSurname(text)}
+        maxLength={40}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
@@ -133,6 +163,7 @@ const RegisterScreen = ({navigation}) => {
         label='city'
         placeholder="Ciudad de residencia"
         onChangeText={text => setCity(text)}
+        maxLength={40}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
@@ -141,6 +172,7 @@ const RegisterScreen = ({navigation}) => {
         label='province'
         placeholder="Provincia de residencia"
         onChangeText={text => setProvince(text)}
+        maxLength={40}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
@@ -150,6 +182,7 @@ const RegisterScreen = ({navigation}) => {
         autoComplete='country'
         placeholder="País de residencia"
         onChangeText={text => setCountry(text)}
+        maxLength={40}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
@@ -157,24 +190,27 @@ const RegisterScreen = ({navigation}) => {
       <View style={styles.row}>
         <TextInput
           value={day}
-          placeholder='DD'
+          placeholder='Día'
           onChangeText={handleDayChange}
+          onBlur={handleDayBlur}
           style={styles.input}
           keyboardType='numeric'
           maxLength={2}
         />
         <TextInput
           value={month}
-          placeholder='MM'
+          placeholder='Mes'
           onChangeText={handleMonthChange}
+          onBlur={handleMonthBlur}
           style={styles.input}
           keyboardType='numeric'
           maxLength={2}
         />
         <TextInput
           value={year}
-          placeholder='YYYY'
+          placeholder='Año'
           onChangeText={handleYearChange}
+          onBlur={handleYearBlur}
           style={styles.input}
           keyboardType='numeric'
           maxLength={4}
@@ -187,6 +223,7 @@ const RegisterScreen = ({navigation}) => {
         inputMode='numeric'
         placeholder="Ingresa tu DNI sin puntos ni comas"
         onChangeText={text => setDni(text)}
+        maxLength={8}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
@@ -197,6 +234,7 @@ const RegisterScreen = ({navigation}) => {
         inputMode='tel'
         placeholder="Número de telefóno (opcional)"
         onChangeText={text => setPhone(text)}
+        maxLength={15}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
         
