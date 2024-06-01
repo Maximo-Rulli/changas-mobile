@@ -10,6 +10,7 @@ import {
   Alert,
   StyleSheet
 } from 'react-native';
+import messages from '../utils/messages';
 
 const RegisterScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -20,26 +21,89 @@ const RegisterScreen = ({navigation}) => {
   const [province, setProvince] = useState('');
   const [country, setCountry] = useState('');
   const [phone, setPhone] = useState('');
+  const [birth, setBirth] = useState('');
   const [day, setDay] = useState('');
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [dni, setDni] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // Get the 18 year old date
+  const today = new Date()
+  const minBirth = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate())
 
   const handleLogin = async () => {
     try {
-      
-      if (result) {
-        const {id_user, username} = result
-        // Reset the stack as the user just logged in
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Logged',
-          params: { id_user: id_user, username: username } }],
+      setLoading(true)
+
+      //Check if the email is valid
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      const valid_mail = re.test(String(email).toLowerCase())
+      if (email === '' || !valid_mail){
+        setError(messages.error.email_invalid);
+      }
+      else if (password === '' || password.length < 3){
+        setError(messages.error.password_invalid);
+      }
+      else if (name === ''){
+        setError(messages.error.name_required);
+      }
+      else if (surname === ''){
+        setError(messages.error.name_required);
+      }
+      else if (city === ''){
+        setError(messages.error.location_required);
+      }
+      else if (province === ''){
+        setError(messages.error.location_required);
+      }
+      else if (country === ''){
+        setError(messages.error.location_required);
+      }
+      else if (day === ''){
+        setError(messages.error.birth_required);
+      }
+      else if (month === ''){
+        setError(messages.error.birth_required);
+      }
+      else if (year === ''){
+        setError(messages.error.birth_required);
+      }
+      else if (dni === '' || dni.length !== 8){
+        setError(messages.error.dni_invalid);
+      }
+      else if (!(birth < minBirth)) {
+        setError(messages.error.birth_invalid);
+      }
+      else {
+        setError('');
+        const sendData = { email, password, name, surname, city, province, country, phone, birth, dni }
+        const response = await fetch('https://www.changas.site/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(sendData)
         });
+
+        const data = await response.json()
+
+        setLoading(false)
+
+        if (data.error) {
+          setError(data.error)
+        }
+
+        if (data.message) {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Login'}],
+          });
+        }
       }
     } catch (error) {
-      // Raise error in case something fails in the backend
+      // Raise error in case something fails
       Alert.alert('Error', error.message);
     }
   };
@@ -48,12 +112,8 @@ const RegisterScreen = ({navigation}) => {
     if (/^\d{0,2}$/.test(text)) {
       if (text === '' || (text.length <= 2 && parseInt(text, 10) >= 1 && parseInt(text, 10) <= 31)) {
         setDay(text);
-        setError('');
       } else if (text === '0'){
         setDay('');
-        setError('');
-      } else {
-        setError('Invalid day');
       }
     }
   };
@@ -62,6 +122,7 @@ const RegisterScreen = ({navigation}) => {
     if (day.length === 1) {
       setDay(`0${day}`);
     }
+    handleDateBlur();
   };
 
 
@@ -69,14 +130,9 @@ const RegisterScreen = ({navigation}) => {
     if (/^\d{0,2}$/.test(text)) {
       if (text === '' || (text.length <= 2 && parseInt(text, 10) >= 1 && parseInt(text, 10) <= 12)) {
         setMonth(text);
-        setError('');
       } 
       else if (text === '0'){
         setMonth('');
-        setError('');
-      }
-      else {
-        setError('Invalid month');
       }
     }
   };
@@ -85,22 +141,13 @@ const RegisterScreen = ({navigation}) => {
     if (month.length === 1) {
       setMonth(`0${month}`);
     }
+    handleDateBlur();
   };
 
-  const handleYearChange = (text) => {
-    /*if (/^\d{0,4}$/.test(text)) {
-      if (text === '' || (text.length === 4 && parseInt(text, 10) >= 1900 && parseInt(text, 10) <= 2100)) {
-        setYear(text);
-        setError('');
-      } else {
-        setError('Invalid year');
-      }
-    }*/
-    setYear(text);
-  };
-
-  const handleYearBlur = () => {
-    console.log(parseInt(year, 10))
+  const handleDateBlur = () => {
+    if (day.length === 2 && month.length === 2  && year.length === 4){
+      setBirth(new Date(`${year}-${month}-${day}`));
+    }
   };
 
 
@@ -209,8 +256,8 @@ const RegisterScreen = ({navigation}) => {
         <TextInput
           value={year}
           placeholder='Año'
-          onChangeText={handleYearChange}
-          onBlur={handleYearBlur}
+          onChangeText={text => setYear(text)}
+          onBlur={handleDateBlur}
           style={styles.input}
           keyboardType='numeric'
           maxLength={4}
@@ -238,8 +285,10 @@ const RegisterScreen = ({navigation}) => {
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
         
-        <Button title="Registrate" onPress={handleLogin} />
-
+        <Button title="Registrate" disabled={loading} onPress={handleLogin}/>
+        <View style={[styles.errorContainer, error ? styles.visible : styles.hidden]}>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
         <View
           style={{
             flexDirection: 'row',
@@ -247,7 +296,7 @@ const RegisterScreen = ({navigation}) => {
             marginBottom: 30,
           }}>
           <Text>¿Ya tienes cuenta?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Text style={{color: '#AD40AF', fontWeight: '700'}}> Inicia sesión</Text>
           </TouchableOpacity>
         </View>
@@ -271,6 +320,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flex: 1,
     marginRight: 5,
+  },
+  errorContainer: {
+    borderWidth: 2,
+    borderRadius: 8,
+    padding: 8,
+    borderColor: 'red',
+    backgroundColor: '#F8D7DA',
+    marginVertical: 10,
+  },
+  errorText: {
+    color: 'red',
+  },
+  hidden: {
+    display: 'none',
+  },
+  visible: {
+    display: 'flex',
   },
 });
 
