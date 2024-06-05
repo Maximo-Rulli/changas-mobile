@@ -10,6 +10,7 @@ import ProposalsScreen from './screens/ProposalsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ReviewsScreen from './screens/ReviewsScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import ChatsDashboardScreen from './screens/ChatsDashboardScreen'
 import * as SecureStore from 'expo-secure-store';
 
 const Stack = createNativeStackNavigator();
@@ -72,6 +73,25 @@ function ProfileRoot({route}) {
   );
 }
 
+function ChatsRoot() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="ChatsDashboard"
+        component={ChatsDashboardScreen}
+        options={{title: 'Chats'}}
+        />
+        <Stack.Screen
+        name="Chat"
+        component={WorkersScreen}
+        initialParams={{ category: null }}
+        options={({ route }) => ({ title: `Buscando ${route.params.category}` })}
+        />
+    </Stack.Navigator>
+  );
+}
+
+
 function TabNavigator({route}) {
   const {id_user, username} = route.params
   return (
@@ -90,6 +110,11 @@ function TabNavigator({route}) {
         name="ProposalsRoot"
         component={ProposalsRoot}
         options={{title: 'Ofertas', headerShown: false}}
+      />
+      <Tab.Screen
+        name="ChatsRoot"
+        component={ChatsRoot}
+        options={{title: 'Chats', headerShown: false}}
       />
       <Tab.Screen
         name="ProfileRoot"
