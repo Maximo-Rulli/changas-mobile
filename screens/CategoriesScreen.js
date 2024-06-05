@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, Button, ScrollView, ActivityIndicator } from 'react-native';
 import { getCategories } from '../actions/getCategories';
 
-const CategoriesScreen = ({ navigation }) => {
+const CategoriesScreen = ({ route, navigation }) => {
   const [categories, setCategories] = useState(null);
   const [loading, setLoading] = useState(true);
+  
+  // Retrieve data from params
+  const { type } = route.params;
 
   useEffect(() => {
     async function loadCategories() {
