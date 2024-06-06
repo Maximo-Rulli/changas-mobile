@@ -1,49 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Button, ScrollView, ActivityIndicator } from 'react-native';
-import { getCategories } from '../actions/getCategories';
+import { Text, View, Button, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import PusherClient from 'pusher-js';
+import {NEXT_PUBLIC_PUSHER_KEY} from '@env';
+import messages from '../utils/messages';
+import AuthLogin from '../actions/login';
+import useFetchUser from '../hooks/useFetchUser';
 
-const ChatsDashboardScreen = ({ route, navigation }) => {
-  const [categories, setCategories] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+const ChatsDashboardScreen = () => {
+  const {id_user} = useFetchUser();
+
+  const pusher = new PusherClient(
+    NEXT_PUBLIC_PUSHER_KEY,
+    { cluster: 'sa1', channelAuthorization: { 
+      endpoint: 'https://www.changas.site/auth/pusher',
+      transport: 'ajax',
+      params: { user_id: id_user } } }
+  )
+  const channel = pusher.subscribe(`presence-31`)
   
-  // Retrieve data from params
-  const { type } = route.params;
+  channel.bind('pusher:subscription_error', () => {
+    Alert.alert('Error', messages.error.fail_subscription);
+  })
 
-  useEffect(() => {
-    async function loadCategories() {
-      const columns = 'name, id'
-      const fetchedCategories = await getCategories(columns);
-      setCategories(fetchedCategories);
-      setLoading(false);
-    }
-    loadCategories();
-  }, []);
-
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
-
-  return (
-    <ScrollView>
-      {categories && categories.map((category, index) => (
-        <View key={index}>
-          <Text>{category.name}</Text>
-          <Button
-            title={`Encontrar ${type === 'trabajador' ? '' : 'ofertas de '}${category.name}`}
-            onPress={() => {
-              type === 'trabajador'
-                ? navigation.navigate('Workers', { category: category.name })
-                : navigation.navigate('Proposals', { category: category.name })
-            }}
-          />
-        </View>
-      ))}
-    </ScrollView>
-  );
 };
+
 
 export default ChatsDashboardScreen;
