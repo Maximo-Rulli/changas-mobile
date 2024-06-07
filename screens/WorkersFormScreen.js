@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, Button, TextInput, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import {getCategories} from '../actions/getCategories';
+import messages from '../utils/messages';
 
 const WorkersFormScreen = ({ navigation, route }) => {
   const [hourlyPrice, setHourlyPrice] = useState('')
@@ -36,7 +37,7 @@ const WorkersFormScreen = ({ navigation, route }) => {
     if ((price > 0 && price < 1000000) || text === '') {
       setHourlyPrice(cleanInput)
     }
-  };
+  }
 
   const handleEmployeesChange = (text) => {
   // Remove any dots from the input to ensure only integer values
@@ -45,47 +46,63 @@ const WorkersFormScreen = ({ navigation, route }) => {
   if ((employees > 0 && employees < 30000) || text === '') {
     setEmployees(cleanInput)
   }
-  };
+  }
   
   const handleSubmit = async () => {
     setLoading(true)
-    // Validate and return accurate location
-    const locationResponse = await fetch('https://www.changas.site/api/geo/get-location', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ city, province, country, complete: true })
-    })
-    const unstrucResponse = await locationResponse.json()
-    const location = unstrucResponse.city + ', ' + unstrucResponse.province + ', ' + unstrucResponse.country
-    const lat = unstrucResponse.lat
-    const lng = unstrucResponse.lng
-  
-    const sendData = { category, IdUser, hourlyPrice, attentionHours, username, location, lat, lng, employees, description }
-  
-    setError(null)
-  
-    const response = await fetch('https://www.changas.site/api/forms/upload-job', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(sendData)
-    })
-    const data = await response.json()
-  
-    setLoading(false)
-  
-    if (data.error) {
-      setError(data.error)
+
+    if (hourlyPrice === '' || category === '' || attentionHours === '' || employees === '' || city === '' || province === '' || country === '' || description === ''){
+      setError(messages.error.form_field_required)
+      setLoading(false)
     }
-    if (data.message) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Profile' }],
-      });
-    }
+    else {
+      // Validate and return accurate location
+      const locationResponse = await fetch('https://www.changas.site/api/geo/get-location', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ city, province, country, complete: true })
+      })
+      const unstrucResponse = await locationResponse.json()
+
+      // We assume that a successful response will return 200
+      if (locationResponse.status !== 200){
+        setError(unstrucResponse.message)
+        setLoading(false)
+      }
+
+      else {
+        const location = unstrucResponse.city + ', ' + unstrucResponse.province + ', ' + unstrucResponse.country
+        const lat = unstrucResponse.lat
+        const lng = unstrucResponse.lng
+      
+        const sendData = { category, IdUser, hourlyPrice, attentionHours, username, location, lat, lng, employees, description }
+      
+        setError(null)
+      
+        const response = await fetch('https://www.changas.site/api/forms/upload-job', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(sendData)
+        })
+        const data = await response.json()
+      
+        setLoading(false)
+      
+        if (data.error) {
+          setError(data.error)
+        }
+        if (data.message) {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Profile' }],
+          })
+        }
+      }
+    } 
   }
 
   return (

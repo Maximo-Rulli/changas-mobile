@@ -30,7 +30,8 @@ const messages = {
     failed_proposal_fetch: 'Ocurrió un error al buscar las ofertas laborales',
     failed_user_update: 'Ocurrió un error al actualizar la información del usuario',
     failed_worker_update: 'Ocurrió un error al actualizar la información del trabajo',
-    failed_proposal_update: 'Ocurrió un error al actualizar la información de la oferta'
+    failed_proposal_update: 'Ocurrió un error al actualizar la información de la oferta',
+    form_field_required: 'Hay campos sin rellenar, por favor complete la información faltante'
   },
   success: {
     user_created: 'El usuario ha sido creado',
