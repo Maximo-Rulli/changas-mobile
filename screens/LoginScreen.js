@@ -19,12 +19,12 @@ const LoginScreen = ({navigation}) => {
     try {
       const result = await AuthLogin(email, password);
       if (result) {
-        const {id_user, username} = result
+        const {IdUser, username} = result
         // Reset the stack as the user just logged in
         navigation.reset({
           index: 0,
           routes: [{ name: 'Logged',
-          params: { id_user: id_user, username: username } }],
+          params: { IdUser: IdUser, username: username } }],
         });
       }
     } catch (error) {

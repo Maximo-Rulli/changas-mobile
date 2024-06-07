@@ -8,7 +8,7 @@ import { getJobs } from '../actions/getJobs';
 import formatDate from '../utils/formatDate';
 
 const ProfileScreen = ({ navigation }) => {
-  const { username, id_user } = useFetchUser();
+  const { username, IdUser } = useFetchUser();
   const [user, setUser] = useState({ email: null, phone: null, location: null, birth: null, dni: null});
   const [jobs, setJobs] = useState([]);
   const [proposals, setProposals] = useState([]);
@@ -16,19 +16,19 @@ const ProfileScreen = ({ navigation }) => {
 
   useEffect(() => {
     async function loadUserData() {
-      if (id_user) {
+      if (IdUser) {
         const user_columns = 'email, phone, location, birth, dni'
-        const fetchedUser = await getUser(id_user, user_columns);
+        const fetchedUser = await getUser(IdUser, user_columns);
         setUser(fetchedUser || { email: null, phone: null, location: null, birth: null, dni: null });
         const proposals_columns = 'category, budget, open_date, location, description';
         const workers_columns = 'category, hourly_price, attention_hours, score, location, employees, description';
-        setProposals(await getOffers(id_user, proposals_columns));
-        setJobs(await getJobs(id_user, workers_columns));
+        setProposals(await getOffers(IdUser, proposals_columns));
+        setJobs(await getJobs(IdUser, workers_columns));
         setLoading(false);
       }
     }
     loadUserData();
-  }, [id_user]);
+  }, [IdUser]);
 
   if (loading) {
     return (
@@ -50,6 +50,9 @@ const ProfileScreen = ({ navigation }) => {
           : jobs.map((job, index) => <JobCard key={index} job={job} navigation={navigation} />)
         }
       </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Subir oficio" onPress={() => navigation.navigate('WorkersForm')} />
+      </View>
 
       <Text style={styles.sectionHeader}>Propuestas publicadas por vos</Text>
       <View style={styles.cardContainer}>
@@ -57,6 +60,9 @@ const ProfileScreen = ({ navigation }) => {
           ? <Text>No has publicado ofertas laborales</Text>
           : proposals.map((proposal, index) => <ProposalCard key={index} proposal={proposal} />)
         }
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Subir oferta laboral" onPress={() => navigation.navigate('ProposalsForm')} />
       </View>
 
       <View style={styles.buttonContainer}>

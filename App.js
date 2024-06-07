@@ -10,7 +10,9 @@ import ProposalsScreen from './screens/ProposalsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ReviewsScreen from './screens/ReviewsScreen';
 import RegisterScreen from './screens/RegisterScreen';
-import ChatsDashboardScreen from './screens/ChatsDashboardScreen'
+import ChatsDashboardScreen from './screens/ChatsDashboardScreen';
+import WorkersFormScreen from './screens/WorkersFormScreen';
+import ProposalsFormScreen from './screens/ProposalsFormScreen';
 import * as SecureStore from 'expo-secure-store';
 
 const Stack = createNativeStackNavigator();
@@ -55,7 +57,7 @@ function ProposalsRoot() {
 }
 
 function ProfileRoot({route}) {
-  const {id_user} = route.params
+  const {IdUser, username} = route.params
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -66,8 +68,20 @@ function ProfileRoot({route}) {
         <Stack.Screen
         name="Reviews"
         component={ReviewsScreen}
-        initialParams={{ category: null, id_user}}
+        initialParams={{ category: null, IdUser}}
         options={({ route }) => ({ title: `Reseñas de ${route.params.category}` })}
+        />
+        <Stack.Screen
+        name="ProposalsForm"
+        initialParams={{IdUser, username}}
+        component={ProposalsFormScreen}
+        options={{title: 'Subir oferta laboral'}}
+        />
+        <Stack.Screen
+        name="WorkersForm"
+        initialParams={{IdUser, username}}
+        component={WorkersFormScreen}
+        options={{title: 'Subir oficio'}}
         />
     </Stack.Navigator>
   );
@@ -93,7 +107,7 @@ function ChatsRoot() {
 
 
 function TabNavigator({route}) {
-  const {id_user, username} = route.params
+  const {IdUser, username} = route.params
   return (
     <Tab.Navigator>
       <Stack.Screen
@@ -119,7 +133,7 @@ function TabNavigator({route}) {
       <Tab.Screen
         name="ProfileRoot"
         component={ProfileRoot}
-        initialParams={{id_user}}
+        initialParams={{IdUser, username}}
         options={{title: 'Perfil', headerShown: false}}
       />
     </Tab.Navigator>
@@ -127,14 +141,14 @@ function TabNavigator({route}) {
 }
 
 
-function DefaultStack(username, id_user) {
+function DefaultStack(username, IdUser) {
   return (
     <Stack.Navigator>
-      {username && id_user ? //If the user is not logged in, its data aren't present
+      {username && IdUser ? //If the user is not logged in, its data aren't present
         <Stack.Screen
           name="DefaultLogged"
           component={TabNavigator}
-          initialParams={{id_user, username}}
+          initialParams={{IdUser, username}}
           options={{headerShown: false}}
         />  
         : 
@@ -147,7 +161,7 @@ function DefaultStack(username, id_user) {
       <Stack.Screen
         name="Logged"
         component={TabNavigator}
-        initialParams={{id_user:null, username:null}}
+        initialParams={{IdUser:null, username:null}}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -166,19 +180,19 @@ function DefaultStack(username, id_user) {
 
 const App = () => {
   const [username, setUsername] = useState(null)
-  const [id_user, setId_user] = useState(null)
+  const [IdUser, setIdUser] = useState(null)
 
   useEffect(() => {
     async function getData (){
       setUsername(await SecureStore.getItemAsync('username'));
-      setId_user(await SecureStore.getItemAsync('id_user'));
+      setIdUser(await SecureStore.getItemAsync('id_user'));
     }
     getData();
   }, [])
 
   return (
     <NavigationContainer>
-      {DefaultStack(username, id_user)}
+      {DefaultStack(username, IdUser)}
     </NavigationContainer>
   );
 };

@@ -4,7 +4,7 @@ import { Alert } from 'react-native';
 
 const useFetchUser = () => {
   const [username, setUsername] = useState('');
-  const [id_user, setIdUser] = useState('');
+  const [IdUser, setIdUser] = useState('');
 
   useEffect(() => {
     async function fetchUser() {
@@ -20,7 +20,7 @@ const useFetchUser = () => {
     fetchUser();
   }, []);
 
-  return {username, id_user};
+  return {username, IdUser};
 };
 
 export default useFetchUser;

@@ -8,11 +8,11 @@ const ReviewsScreen = ({ route }) => {
   const [loading, setLoading] = useState(true);
   
   // Retrieve data from params
-  const { category, id_user } = route.params;
+  const { category, IdUser } = route.params;
 
   useEffect(() => {
     async function loadReviews() {
-      const fetchedReviews = await getWorkerRatings(id_user, category);
+      const fetchedReviews = await getWorkerRatings(IdUser, category);
       setReviews(fetchedReviews);
       setLoading(false);
     }
