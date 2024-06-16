@@ -1,9 +1,9 @@
-import React from 'react';
-import {Text, View, Button, StyleSheet } from 'react-native';
-import useFetchUser from '../hooks/useFetchUser';
+import React from 'react'
+import {Text, View, Button, StyleSheet } from 'react-native'
+import useFetchUser from '../hooks/useFetchUser'
 
 const HomeScreen = ({navigation}) => {
-  const {username} = useFetchUser();
+  const {username} = useFetchUser()
 
   return (
     <View>
@@ -15,13 +15,13 @@ const HomeScreen = ({navigation}) => {
         <Button title="Encontrar proveedor" onPress={() => {navigation.navigate('WorkersRoot', { screen: 'WorkersCategories' })}} />
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   buttonContainer: {
     padding: 10,
   },
-});
+})
 
-export default HomeScreen;
+export default HomeScreen

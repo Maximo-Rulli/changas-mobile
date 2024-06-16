@@ -1,41 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView, ActivityIndicator, StyleSheet, Alert, Button} from 'react-native';
-import formatDate from '../utils/formatDate';
-import messages from '../utils/messages';
+import React, { useEffect, useState } from 'react'
+import { Text, View, ScrollView, ActivityIndicator, StyleSheet, Alert, Button} from 'react-native'
+import formatDate from '../utils/formatDate'
+import messages from '../utils/messages'
 import { RESULTS_PER_PAGE } from '../constants'
 
 const ProposalsScreen = ({ route }) => {
-  const [proposals, setProposals] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(0);
+  const [proposals, setProposals] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(0)
   
   // Retrieve data from params
-  const { category } = route.params;
+  const { category } = route.params
 
   useEffect(() => {
     async function loadProposals() {
-      setLoading(true);
+      setLoading(true)
       const query = `category=${category}&page=${page}&country=undefined&province=undefined&city=undefined&distance=undefined&budget=undefined&openDate=undefined`
-      const response = await fetch(`https://www.changas.site/api/filters/get-proposals?${query}`);
-      const fetchedData = await response.json();
+      const response = await fetch(`https://www.changas.site/api/filters/get-proposals?${query}`)
+      const fetchedData = await response.json()
       if (fetchedData.error) {
-        Alert.alert(messages.error.failed_proposal_fetch);
-        setProposals([]);
+        Alert.alert(messages.error.failed_proposal_fetch)
+        setProposals([])
       }
       else {
-        setProposals(fetchedData.proposals);
+        setProposals(fetchedData.proposals)
       }
-      setLoading(false);
+      setLoading(false)
     }
-    loadProposals();
-  }, [category, page]);
+    loadProposals()
+  }, [category, page])
 
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
-    );
+    )
   }
 
   return (
@@ -66,8 +66,8 @@ const ProposalsScreen = ({ route }) => {
         {proposals.length === RESULTS_PER_PAGE ? <Button title='&gt;' onPress={() => setPage(Number(page) + 1)}/> : undefined}
       </View>
     </ScrollView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -115,6 +115,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 30,
   },
-});
+})
 
-export default ProposalsScreen;
+export default ProposalsScreen

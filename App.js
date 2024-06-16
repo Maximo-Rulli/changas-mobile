@@ -1,22 +1,23 @@
-import React, {useEffect, useState} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from './screens/HomeScreen';
-import LoginScreen from './screens/LoginScreen';
-import WorkersScreen from './screens/WorkersScreen';
-import CategoriesScreen from './screens/CategoriesScreen';
-import ProposalsScreen from './screens/ProposalsScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import ReviewsScreen from './screens/ReviewsScreen';
-import RegisterScreen from './screens/RegisterScreen';
-import ChatsDashboardScreen from './screens/ChatsDashboardScreen';
-import WorkersFormScreen from './screens/WorkersFormScreen';
-import ProposalsFormScreen from './screens/ProposalsFormScreen';
-import * as SecureStore from 'expo-secure-store';
+import React, {useEffect, useState} from 'react'
+import {NavigationContainer} from '@react-navigation/native'
+import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import HomeScreen from './screens/HomeScreen'
+import LoginScreen from './screens/LoginScreen'
+import WorkersScreen from './screens/WorkersScreen'
+import CategoriesScreen from './screens/CategoriesScreen'
+import ProposalsScreen from './screens/ProposalsScreen'
+import ProfileScreen from './screens/ProfileScreen'
+import ReviewsScreen from './screens/ReviewsScreen'
+import RegisterScreen from './screens/RegisterScreen'
+import ChatsDashboardScreen from './screens/ChatsDashboardScreen'
+import WorkersFormScreen from './screens/WorkersFormScreen'
+import ProposalsFormScreen from './screens/ProposalsFormScreen'
+import * as SecureStore from 'expo-secure-store'
+import UserIcon from './assets/icons/Usuario.svg'
 
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator()
+const Tab = createBottomTabNavigator()
 
 function WorkersRoot() {
   return (
@@ -34,7 +35,7 @@ function WorkersRoot() {
         options={({ route }) => ({ title: `Buscando ${route.params.category}` })}
         />
     </Stack.Navigator>
-  );
+  )
 }
 
 function ProposalsRoot() {
@@ -53,7 +54,7 @@ function ProposalsRoot() {
         options={({ route }) => ({ title: `Ofertas de ${route.params.category}` })}
         />
     </Stack.Navigator>
-  );
+  )
 }
 
 function ProfileRoot({route}) {
@@ -84,7 +85,7 @@ function ProfileRoot({route}) {
         options={{title: 'Subir oficio'}}
         />
     </Stack.Navigator>
-  );
+  )
 }
 
 function ChatsRoot() {
@@ -102,14 +103,21 @@ function ChatsRoot() {
         options={({ route }) => ({ title: `Buscando ${route.params.category}` })}
         />
     </Stack.Navigator>
-  );
+  )
 }
 
 
 function TabNavigator({route}) {
   const {IdUser, username} = route.params
   return (
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={({route}) => ({
+      tabBarIcon: () => {
+        if (route.name === 'ProfileRoot'){
+          return <UserIcon width={30} height={30}/>
+        }
+        
+      }
+    })}>
       <Stack.Screen
         name="Home"
         component={HomeScreen}
@@ -137,7 +145,7 @@ function TabNavigator({route}) {
         options={{title: 'Perfil', headerShown: false}}
       />
     </Tab.Navigator>
-  );
+  )
 }
 
 
@@ -175,7 +183,7 @@ function DefaultStack(username, IdUser) {
         options={{title: 'Registrarse'}}
       />
     </Stack.Navigator>
-  );
+  )
 }
 
 const App = () => {
@@ -184,17 +192,17 @@ const App = () => {
 
   useEffect(() => {
     async function getData (){
-      setUsername(await SecureStore.getItemAsync('username'));
-      setIdUser(await SecureStore.getItemAsync('id_user'));
+      setUsername(await SecureStore.getItemAsync('username'))
+      setIdUser(await SecureStore.getItemAsync('id_user'))
     }
-    getData();
+    getData()
   }, [])
 
   return (
     <NavigationContainer>
       {DefaultStack(username, IdUser)}
     </NavigationContainer>
-  );
-};
+  )
+}
 
-export default App;
+export default App

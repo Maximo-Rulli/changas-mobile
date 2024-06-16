@@ -1,41 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, Button, StyleSheet } from 'react-native';
-import useFetchUser from '../hooks/useFetchUser';
-import Logout from '../actions/logout';
-import { getUser } from '../actions/getUser';
-import { getOffers } from '../actions/getOffers';
-import { getJobs } from '../actions/getJobs';
-import formatDate from '../utils/formatDate';
+import React, { useState, useEffect } from 'react'
+import { Text, View, ScrollView, Button, StyleSheet } from 'react-native'
+import useFetchUser from '../hooks/useFetchUser'
+import Logout from '../actions/logout'
+import { getUser } from '../actions/getUser'
+import { getOffers } from '../actions/getOffers'
+import { getJobs } from '../actions/getJobs'
+import formatDate from '../utils/formatDate'
 
 const ProfileScreen = ({ navigation }) => {
-  const { username, IdUser } = useFetchUser();
-  const [user, setUser] = useState({ email: null, phone: null, location: null, birth: null, dni: null});
-  const [jobs, setJobs] = useState([]);
-  const [proposals, setProposals] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { username, IdUser } = useFetchUser()
+  const [user, setUser] = useState({ email: null, phone: null, location: null, birth: null, dni: null})
+  const [jobs, setJobs] = useState([])
+  const [proposals, setProposals] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function loadUserData() {
       if (IdUser) {
         const user_columns = 'email, phone, location, birth, dni'
-        const fetchedUser = await getUser(IdUser, user_columns);
-        setUser(fetchedUser || { email: null, phone: null, location: null, birth: null, dni: null });
-        const proposals_columns = 'category, budget, open_date, location, description';
-        const workers_columns = 'category, hourly_price, attention_hours, score, location, employees, description';
-        setProposals(await getOffers(IdUser, proposals_columns));
-        setJobs(await getJobs(IdUser, workers_columns));
-        setLoading(false);
+        const fetchedUser = await getUser(IdUser, user_columns)
+        setUser(fetchedUser || { email: null, phone: null, location: null, birth: null, dni: null })
+        const proposals_columns = 'category, budget, open_date, location, description'
+        const workers_columns = 'category, hourly_price, attention_hours, score, location, employees, description'
+        setProposals(await getOffers(IdUser, proposals_columns))
+        setJobs(await getJobs(IdUser, workers_columns))
+        setLoading(false)
       }
     }
-    loadUserData();
-  }, [IdUser]);
+    loadUserData()
+  }, [IdUser])
 
   if (loading) {
     return (
       <View>
         <Text>Cargando...</Text>
       </View>
-    );
+    )
   }
 
   return (
@@ -69,8 +69,8 @@ const ProfileScreen = ({ navigation }) => {
         <Button title="Cerrar sesión" onPress={() => Logout({ navigation })} />
       </View>
     </ScrollView>
-  );
-};
+  )
+}
 
 const ProfileCard = ({ user }) => (
   <View style={styles.profileCard}>
@@ -80,7 +80,7 @@ const ProfileCard = ({ user }) => (
     <Text>DNI: {user.dni}</Text>
     <Text>Nacimiento: {formatDate(user.birth)}</Text>
   </View>
-);
+)
 
 const JobCard = ({ job, navigation }) => (
   <View style={styles.card}>
@@ -95,7 +95,7 @@ const JobCard = ({ job, navigation }) => (
         <Button title="Reseñas" onPress={() => navigation.navigate('Reviews', { category: job.category })} />
     </View>
   </View>
-);
+)
 
 const ProposalCard = ({ proposal }) => (
   <View style={styles.card}>
@@ -105,7 +105,7 @@ const ProposalCard = ({ proposal }) => (
     <Text>Fecha de publicación: {formatDate(proposal.open_date.slice(0,10))}</Text>
     <Text>Descripción: {proposal.description}</Text>
   </View>
-);
+)
 
 const styles = {
   container: {
@@ -136,6 +136,6 @@ const styles = {
     padding: 10,
     marginBottom: 10,
   },
-};
+}
 
-export default ProfileScreen;
+export default ProfileScreen

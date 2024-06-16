@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView, ActivityIndicator, StyleSheet } from 'react-native';
-import { getWorkerRatings } from '../actions/getWorkerRatings';
-import formatDate from '../utils/formatDate';
+import React, { useEffect, useState } from 'react'
+import { Text, View, ScrollView, ActivityIndicator, StyleSheet } from 'react-native'
+import { getWorkerRatings } from '../actions/getWorkerRatings'
+import formatDate from '../utils/formatDate'
 
 const ReviewsScreen = ({ route }) => {
-  const [reviews, setReviews] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [reviews, setReviews] = useState(null)
+  const [loading, setLoading] = useState(true)
   
   // Retrieve data from params
-  const { category, IdUser } = route.params;
+  const { category, IdUser } = route.params
 
   useEffect(() => {
     async function loadReviews() {
-      const fetchedReviews = await getWorkerRatings(IdUser, category);
-      setReviews(fetchedReviews);
-      setLoading(false);
+      const fetchedReviews = await getWorkerRatings(IdUser, category)
+      setReviews(fetchedReviews)
+      setLoading(false)
     }
-    loadReviews();
-  }, [category]);
+    loadReviews()
+  }, [category])
 
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
-    );
+    )
   }
 
   return (
@@ -46,8 +46,8 @@ const ReviewsScreen = ({ route }) => {
         <Text style={styles.noReviewsText}>No hay reseñas hechas</Text>
       )}
     </ScrollView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
 container: {
@@ -82,6 +82,6 @@ noReviewsText: {
     fontSize: 16,
     color: '#999',
   },
-});
+})
 
-export default ReviewsScreen;
+export default ReviewsScreen

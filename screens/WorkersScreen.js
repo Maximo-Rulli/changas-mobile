@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import {Text, View, ScrollView, ActivityIndicator, StyleSheet, Alert, Button} from 'react-native';
-import messages from '../utils/messages';
+import React, { useEffect, useState } from 'react'
+import {Text, View, ScrollView, ActivityIndicator, StyleSheet, Alert, Button} from 'react-native'
+import messages from '../utils/messages'
 import { RESULTS_PER_PAGE } from '../constants'
 
 const WorkersScreen = ({ route }) => {
-  const [workers, setWorkers] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(0);
+  const [workers, setWorkers] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(0)
   
   // Retrieve data from params
-  const { category } = route.params;
+  const { category } = route.params
 
   useEffect(() => {
     async function loadWorkers() {
-      setLoading(true);
-      const query = `category=${category}&page=${page}&country=undefined&province=undefined&city=undefined&distance=undefined&hourly_price=undefined&employees=undefined&score=undefined&name=undefined`
-      const response = await fetch(`https://www.changas.site/api/filters/get-workers?${query}`);
-      const fetchedData = await response.json();
+      setLoading(true)
+      const query = `category=${category}&page=${page}&country=undefined&province=undefined&city=undefined&distance=undefined&min_hourly_price=undefined&max_hourly_price=undefined&employees=undefined&max_score=undefined&min_score=undefined&name=undefined`
+      const response = await fetch(`https://www.changas.site/api/filters/get-workers?${query}`)
+      const fetchedData = await response.json()
       if (fetchedData.error) {
-        Alert.alert(messages.error.failed_worker_fetch);
-        setWorkers([]);
+        Alert.alert(messages.error.failed_worker_fetch)
+        setWorkers([])
       }
       else {
-        setWorkers(fetchedData.workers);
+        setWorkers(fetchedData.workers)
       }
-      setLoading(false);
+      setLoading(false)
     }
     loadWorkers();
-  }, [category, page]);
+  }, [category, page])
 
   if (loading) {
     return (
@@ -123,6 +123,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 30,
   },
-});
+})
 
-export default WorkersScreen;
+export default WorkersScreen

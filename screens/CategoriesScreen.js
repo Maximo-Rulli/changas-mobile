@@ -1,30 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, Button, ScrollView, ActivityIndicator } from 'react-native';
-import { getCategories } from '../actions/getCategories';
+import React, { useEffect, useState } from 'react'
+import { Text, View, Button, ScrollView, ActivityIndicator } from 'react-native'
+import { getCategories } from '../actions/getCategories'
+import CategorySvg from '../components/CategorySvg'
 
 const CategoriesScreen = ({ route, navigation }) => {
-  const [categories, setCategories] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState(null)
+  const [loading, setLoading] = useState(true)
   
   // Retrieve data from params
-  const { type } = route.params;
+  const { type } = route.params
 
   useEffect(() => {
     async function loadCategories() {
       const columns = 'name, id'
-      const fetchedCategories = await getCategories(columns);
-      setCategories(fetchedCategories);
-      setLoading(false);
+      const fetchedCategories = await getCategories(columns)
+      setCategories(fetchedCategories)
+      setLoading(false)
     }
-    loadCategories();
-  }, []);
+    loadCategories()
+  }, [])
 
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
-    );
+    )
   }
 
   return (
@@ -32,6 +33,7 @@ const CategoriesScreen = ({ route, navigation }) => {
       {categories && categories.map((category, index) => (
         <View key={index}>
           <Text>{category.name}</Text>
+          <CategorySvg id={category.id} width={40} height={40}/>
           <Button
             title={`Encontrar ${type === 'trabajador' ? '' : 'ofertas de '}${category.name}`}
             onPress={() => {
@@ -43,7 +45,7 @@ const CategoriesScreen = ({ route, navigation }) => {
         </View>
       ))}
     </ScrollView>
-  );
-};
+  )
+}
 
-export default CategoriesScreen;
+export default CategoriesScreen

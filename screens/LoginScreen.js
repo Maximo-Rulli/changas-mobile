@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   SafeAreaView,
   View,
@@ -8,16 +8,16 @@ import {
   Button,
   Linking,
   Alert
-} from 'react-native';
-import AuthLogin from '../actions/login';
+} from 'react-native'
+import AuthLogin from '../actions/login'
 
 const LoginScreen = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleLogin = async () => {
     try {
-      const result = await AuthLogin(email, password);
+      const result = await AuthLogin(email, password)
       if (result) {
         const {IdUser, username} = result
         // Reset the stack as the user just logged in
@@ -29,7 +29,7 @@ const LoginScreen = ({navigation}) => {
       }
     } catch (error) {
       // Raise error in case something fails in the backend
-      Alert.alert('Error', error.message);
+      Alert.alert('Error', error.message)
     }
   };
 
@@ -85,4 +85,4 @@ const LoginScreen = ({navigation}) => {
   );
 };
 
-export default LoginScreen;
+export default LoginScreen

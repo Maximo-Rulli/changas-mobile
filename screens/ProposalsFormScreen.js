@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, Button, TextInput, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import {getCategories} from '../actions/getCategories';
-import messages from '../utils/messages';
+import React, { useState, useEffect } from 'react'
+import { Text, View, ScrollView, Button, TextInput, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native'
+import { Picker } from '@react-native-picker/picker'
+import {getCategories} from '../actions/getCategories'
+import messages from '../utils/messages'
 
 const ProposalsFormScreen = ({ navigation, route }) => {
   const [category, setCategory] = useState([])
@@ -212,6 +212,6 @@ const styles = StyleSheet.create({
   visible: {
     display: 'flex',
   },
-});
+})
 
-export default ProposalsFormScreen;
+export default ProposalsFormScreen

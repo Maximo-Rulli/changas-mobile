@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   SafeAreaView,
   View,
@@ -9,25 +9,25 @@ import {
   ScrollView,
   Alert,
   StyleSheet
-} from 'react-native';
-import messages from '../utils/messages';
+} from 'react-native'
+import messages from '../utils/messages'
 
 const RegisterScreen = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [surname, setSurname] = useState('');
-  const [city, setCity] = useState('');
-  const [province, setProvince] = useState('');
-  const [country, setCountry] = useState('');
-  const [phone, setPhone] = useState('');
-  const [birth, setBirth] = useState('');
-  const [day, setDay] = useState('');
-  const [month, setMonth] = useState('');
-  const [year, setYear] = useState('');
-  const [dni, setDni] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
+  const [surname, setSurname] = useState('')
+  const [city, setCity] = useState('')
+  const [province, setProvince] = useState('')
+  const [country, setCountry] = useState('')
+  const [phone, setPhone] = useState('')
+  const [birth, setBirth] = useState('')
+  const [day, setDay] = useState('')
+  const [month, setMonth] = useState('')
+  const [year, setYear] = useState('')
+  const [dni, setDni] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   // Get the 18 year old date
   const today = new Date()
@@ -38,46 +38,46 @@ const RegisterScreen = ({navigation}) => {
       setLoading(true)
 
       //Check if the email is valid
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      const re = /^(([^<>()[\]\\.,:\s@"]+(\.[^<>()[\]\\.,:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       const valid_mail = re.test(String(email).toLowerCase())
       if (email === '' || !valid_mail){
-        setError(messages.error.email_invalid);
+        setError(messages.error.email_invalid)
       }
       else if (password === '' || password.length < 3){
-        setError(messages.error.password_invalid);
+        setError(messages.error.password_invalid)
       }
       else if (name === ''){
-        setError(messages.error.name_required);
+        setError(messages.error.name_required)
       }
       else if (surname === ''){
-        setError(messages.error.name_required);
+        setError(messages.error.name_required)
       }
       else if (city === ''){
-        setError(messages.error.location_required);
+        setError(messages.error.location_required)
       }
       else if (province === ''){
-        setError(messages.error.location_required);
+        setError(messages.error.location_required)
       }
       else if (country === ''){
-        setError(messages.error.location_required);
+        setError(messages.error.location_required)
       }
       else if (day === ''){
-        setError(messages.error.birth_required);
+        setError(messages.error.birth_required)
       }
       else if (month === ''){
-        setError(messages.error.birth_required);
+        setError(messages.error.birth_required)
       }
       else if (year === ''){
-        setError(messages.error.birth_required);
+        setError(messages.error.birth_required)
       }
       else if (dni === '' || dni.length !== 8){
-        setError(messages.error.dni_invalid);
+        setError(messages.error.dni_invalid)
       }
       else if (!(birth < minBirth)) {
-        setError(messages.error.birth_invalid);
+        setError(messages.error.birth_invalid)
       }
       else {
-        setError('');
+        setError('')
         const sendData = { email, password, name, surname, city, province, country, phone, birth, dni }
         const response = await fetch('https://www.changas.site/api/auth/register', {
           method: 'POST',
@@ -85,7 +85,7 @@ const RegisterScreen = ({navigation}) => {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(sendData)
-        });
+        })
 
         const data = await response.json()
 
@@ -99,56 +99,56 @@ const RegisterScreen = ({navigation}) => {
           navigation.reset({
             index: 0,
             routes: [{ name: 'Login'}],
-          });
+          })
         }
       }
     } catch (error) {
       // Raise error in case something fails
-      Alert.alert('Error', error.message);
+      Alert.alert('Error', error.message)
     }
-  };
+  }
 
   const handleDayChange = (text) => {
     if (/^\d{0,2}$/.test(text)) {
       if (text === '' || (text.length <= 2 && parseInt(text, 10) >= 1 && parseInt(text, 10) <= 31)) {
-        setDay(text);
+        setDay(text)
       } else if (text === '0'){
-        setDay('');
+        setDay('')
       }
     }
-  };
+  }
 
   const handleDayBlur = () => {
     if (day.length === 1) {
-      setDay(`0${day}`);
+      setDay(`0${day}`)
     }
-    handleDateBlur();
-  };
+    handleDateBlur()
+  }
 
 
   const handleMonthChange = (text) => {
     if (/^\d{0,2}$/.test(text)) {
       if (text === '' || (text.length <= 2 && parseInt(text, 10) >= 1 && parseInt(text, 10) <= 12)) {
-        setMonth(text);
+        setMonth(text)
       } 
       else if (text === '0'){
-        setMonth('');
+        setMonth('')
       }
     }
-  };
+  }
 
   const handleMonthBlur = () => {
     if (month.length === 1) {
-      setMonth(`0${month}`);
+      setMonth(`0${month}`)
     }
-    handleDateBlur();
-  };
+    handleDateBlur()
+  }
 
   const handleDateBlur = () => {
     if (day.length === 2 && month.length === 2  && year.length === 4){
-      setBirth(new Date(`${year}-${month}-${day}`));
+      setBirth(new Date(`${year}-${month}-${day}`))
     }
-  };
+  }
 
 
   return (
@@ -302,8 +302,8 @@ const RegisterScreen = ({navigation}) => {
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -338,6 +338,6 @@ const styles = StyleSheet.create({
   visible: {
     display: 'flex',
   },
-});
+})
 
-export default RegisterScreen;
+export default RegisterScreen
