@@ -20,6 +20,9 @@ import ProposalsFormScreen from './screens/ProposalsFormScreen'
 // Miscelaneous imports
 import * as SecureStore from 'expo-secure-store'
 import UserIcon from './assets/icons/Usuario.svg'
+import { FontProvider, useFontContext } from './contexts/FontContext'
+import { commonHeaderStyle } from './styles/commonHeaderStyle'
+
 
 // Create the Stack and Tab navigators
 const Stack = createNativeStackNavigator()
@@ -27,12 +30,14 @@ const Tab = createBottomTabNavigator()
 
 
 function WorkersRoot() {
+  const { fontsLoaded } = useFontContext()
+
+  if (!fontsLoaded) {
+    return null
+  }
+
   return (
-    <Stack.Navigator screenOptions={{
-      headerStyle: {
-        backgroundColor: '#308E45',
-      }
-    }}>
+    <Stack.Navigator screenOptions={commonHeaderStyle}>
       <Stack.Screen
         name="WorkersCategories"
         component={CategoriesScreen}
@@ -51,12 +56,14 @@ function WorkersRoot() {
 
 
 function ProposalsRoot() {
+  const { fontsLoaded } = useFontContext()
+
+  if (!fontsLoaded) {
+    return null
+  }
+
   return (
-    <Stack.Navigator screenOptions={{
-      headerStyle: {
-        backgroundColor: '#308E45',
-      }
-    }}>
+    <Stack.Navigator screenOptions={commonHeaderStyle}>
       <Stack.Screen
         name="ProposalsCategories"
         component={CategoriesScreen}
@@ -75,13 +82,15 @@ function ProposalsRoot() {
 
 
 function ProfileRoot({route}) {
+  const { fontsLoaded } = useFontContext()
+
+  if (!fontsLoaded) {
+    return null
+  }
+
   const {IdUser, username} = route.params
   return (
-    <Stack.Navigator screenOptions={{
-      headerStyle: {
-        backgroundColor: '#308E45',
-      }
-    }}>
+    <Stack.Navigator screenOptions={commonHeaderStyle}>
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}
@@ -111,12 +120,14 @@ function ProfileRoot({route}) {
 
 
 function ChatsRoot() {
+  const { fontsLoaded } = useFontContext()
+
+  if (!fontsLoaded) {
+    return null
+  }
+
   return (
-    <Stack.Navigator screenOptions={{
-      headerStyle: {
-        backgroundColor: '#308E45',
-      }
-    }}>
+    <Stack.Navigator screenOptions={commonHeaderStyle}>
       <Stack.Screen
         name="ChatsDashboard"
         component={ChatsDashboardScreen}
@@ -135,6 +146,12 @@ function ChatsRoot() {
 
 
 function TabNavigator({route}) {
+  const { fontsLoaded } = useFontContext()
+
+  if (!fontsLoaded) {
+    return null
+  }
+
   const {IdUser, username} = route.params
   return (
     <Tab.Navigator screenOptions={({route}) => ({
@@ -148,7 +165,15 @@ function TabNavigator({route}) {
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{title: 'Bienvenido'}}
+        options={{
+          title: 'Bienvenido', 
+          headerStyle: {
+          backgroundColor: commonHeaderStyle.headerStyle.backgroundColor,
+          },
+          headerTintColor: commonHeaderStyle.headerTintColor,
+          headerTitleStyle: {
+            fontFamily: commonHeaderStyle.headerTitleStyle.fontFamily,
+          }}}
       />
       <Tab.Screen
         name="WorkersRoot"
@@ -177,9 +202,15 @@ function TabNavigator({route}) {
 
 
 
-function DefaultStack(username, IdUser) {
+const DefaultStack = ({ username, IdUser }) => {
+  const { fontsLoaded } = useFontContext()
+
+  if (!fontsLoaded) {
+    return null
+  }
+
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={commonHeaderStyle}>
       {username && IdUser ? //If the user is not logged in, its data aren't present
         <Stack.Screen
           name="DefaultLogged"
@@ -191,7 +222,7 @@ function DefaultStack(username, IdUser) {
         <Stack.Screen
           name="DefaultLogin"
           component={LoginScreen}
-          options={{title: 'Inicie sesión', headerStyle: {backgroundColor: '#308E45'} }}
+          options={{title: 'Inicie sesión' }}
         />
       }
       <Stack.Screen
@@ -203,12 +234,12 @@ function DefaultStack(username, IdUser) {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{title: 'Inicie sesión', headerStyle: {backgroundColor: '#308E45'}}}
+        options={{title: 'Inicie sesión'}}
       />
       <Stack.Screen
         name="Register"
         component={RegisterScreen}
-        options={{title: 'Registrarse', headerStyle: {backgroundColor: '#308E45'}}}
+        options={{title: 'Registrarse'}}
       />
     </Stack.Navigator>
   )
@@ -230,8 +261,11 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      {DefaultStack(username, IdUser)}
+      <FontProvider>
+        <DefaultStack username={username} IdUser={IdUser} />
+      </FontProvider>
     </NavigationContainer>
+    
   )
 }
 
