@@ -25,7 +25,13 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+      "expo-font",
+        {
+          "fonts": ["./assets/fonts/Poppins-Regular.ttf", "./assets/fonts/Poppins-Bold.ttf", "./assets/fonts/Poppins-SemiBold.ttf"]
+        }
+      ]
     ],
     "owner": "changas",
     "extra": {

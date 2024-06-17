@@ -1,7 +1,10 @@
+// React functionality imports
 import React, {useEffect, useState} from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+
+// Screens imports
 import HomeScreen from './screens/HomeScreen'
 import LoginScreen from './screens/LoginScreen'
 import WorkersScreen from './screens/WorkersScreen'
@@ -13,34 +16,47 @@ import RegisterScreen from './screens/RegisterScreen'
 import ChatsDashboardScreen from './screens/ChatsDashboardScreen'
 import WorkersFormScreen from './screens/WorkersFormScreen'
 import ProposalsFormScreen from './screens/ProposalsFormScreen'
+
+// Miscelaneous imports
 import * as SecureStore from 'expo-secure-store'
 import UserIcon from './assets/icons/Usuario.svg'
 
+// Create the Stack and Tab navigators
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
 
+
 function WorkersRoot() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#308E45',
+      }
+    }}>
       <Stack.Screen
         name="WorkersCategories"
         component={CategoriesScreen}
         initialParams={{ type: 'trabajador' }}
-        options={{title: 'Encontrar trabajador'}}
+        options={{title: 'Encontrar trabajador' }}
         />
         <Stack.Screen
         name="Workers"
         component={WorkersScreen}
         initialParams={{ category: null }}
-        options={({ route }) => ({ title: `Buscando ${route.params.category}` })}
+        options={({ route }) => ({ title: `Buscando ${route.params.category}`})}
         />
     </Stack.Navigator>
   )
 }
 
+
 function ProposalsRoot() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#308E45',
+      }
+    }}>
       <Stack.Screen
         name="ProposalsCategories"
         component={CategoriesScreen}
@@ -51,16 +67,21 @@ function ProposalsRoot() {
         name="Proposals"
         component={ProposalsScreen}
         initialParams={{ category: null }}
-        options={({ route }) => ({ title: `Ofertas de ${route.params.category}` })}
+        options={({ route }) => ({ title: `Ofertas de ${route.params.category}`})}
         />
     </Stack.Navigator>
   )
 }
 
+
 function ProfileRoot({route}) {
   const {IdUser, username} = route.params
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#308E45',
+      }
+    }}>
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}
@@ -88,9 +109,14 @@ function ProfileRoot({route}) {
   )
 }
 
+
 function ChatsRoot() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#308E45',
+      }
+    }}>
       <Stack.Screen
         name="ChatsDashboard"
         component={ChatsDashboardScreen}
@@ -100,11 +126,12 @@ function ChatsRoot() {
         name="Chat"
         component={WorkersScreen}
         initialParams={{ category: null }}
-        options={({ route }) => ({ title: `Buscando ${route.params.category}` })}
+        options={({ route }) => ({ title: `Buscando ${route.params.category}`})}
         />
     </Stack.Navigator>
   )
 }
+
 
 
 function TabNavigator({route}) {
@@ -116,7 +143,7 @@ function TabNavigator({route}) {
           return <UserIcon width={30} height={30}/>
         }
         
-      }
+      }, headerStyle: {backgroundColor: '#308E45'}
     })}>
       <Stack.Screen
         name="Home"
@@ -149,6 +176,7 @@ function TabNavigator({route}) {
 }
 
 
+
 function DefaultStack(username, IdUser) {
   return (
     <Stack.Navigator>
@@ -163,7 +191,7 @@ function DefaultStack(username, IdUser) {
         <Stack.Screen
           name="DefaultLogin"
           component={LoginScreen}
-          options={{title: 'Inicie sesión'}}
+          options={{title: 'Inicie sesión', headerStyle: {backgroundColor: '#308E45'} }}
         />
       }
       <Stack.Screen
@@ -175,16 +203,18 @@ function DefaultStack(username, IdUser) {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{title: 'Inicie sesión'}}
+        options={{title: 'Inicie sesión', headerStyle: {backgroundColor: '#308E45'}}}
       />
       <Stack.Screen
         name="Register"
         component={RegisterScreen}
-        options={{title: 'Registrarse'}}
+        options={{title: 'Registrarse', headerStyle: {backgroundColor: '#308E45'}}}
       />
     </Stack.Navigator>
   )
 }
+
+
 
 const App = () => {
   const [username, setUsername] = useState(null)
@@ -204,5 +234,6 @@ const App = () => {
     </NavigationContainer>
   )
 }
+
 
 export default App

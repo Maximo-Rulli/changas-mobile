@@ -31,7 +31,7 @@ const CategorySvg = ({ id, width, height }) => {
 
   if (!SvgComponent) {
     // Handle case when SVG is not found
-    return <View style={styles.notFound}><Text>Icon not found</Text></View>
+    return <View style={styles.notFound}><Text>Icono no encontrado</Text></View>
   }
 
   return <SvgComponent width={width} height={height}/>
