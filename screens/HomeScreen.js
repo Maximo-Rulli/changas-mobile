@@ -1,7 +1,7 @@
 import React from 'react'
 import {Text, View, Button, StyleSheet } from 'react-native'
 import useFetchUser from '../hooks/useFetchUser'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
+// import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useFonts } from 'expo-font'
 
 const HomeScreen = ({navigation}) => {
@@ -13,7 +13,7 @@ const HomeScreen = ({navigation}) => {
     return null
   }*/
   return (
-    <SafeAreaProvider>
+    <View>
       <Text>  Bienvenido a Changas {username}!</Text>
       <View style={styles.buttonContainer}>
         <Button title="Encontrar trabajo" onPress={() => {navigation.navigate('ProposalsRoot', { screen: 'ProposalsCategories' })}} />
@@ -21,7 +21,7 @@ const HomeScreen = ({navigation}) => {
       <View style={styles.buttonContainer}>
         <Button title="Encontrar proveedor" onPress={() => {navigation.navigate('WorkersRoot', { screen: 'WorkersCategories' })}} />
       </View>
-    </SafeAreaProvider>
+    </View>
   )
 }
 
