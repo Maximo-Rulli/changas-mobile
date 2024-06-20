@@ -1,6 +1,5 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-// import SvgUri from 'react-native-svg-uri'
 
 // Map of id to SVG imports
 const svgMap = {
