@@ -5,7 +5,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 // Screens imports
-import HomeScreen from './screens/HomeScreen'
 import LoginScreen from './screens/LoginScreen'
 import WorkersScreen from './screens/WorkersScreen'
 import CategoriesScreen from './screens/CategoriesScreen'
@@ -16,9 +15,11 @@ import RegisterScreen from './screens/RegisterScreen'
 import ChatsDashboardScreen from './screens/ChatsDashboardScreen'
 import WorkersFormScreen from './screens/WorkersFormScreen'
 import ProposalsFormScreen from './screens/ProposalsFormScreen'
+import UserScreen from './screens/UserScreen'
 
 // Miscelaneous imports
 import * as SecureStore from 'expo-secure-store'
+import * as SplashScreen from 'expo-splash-screen'
 import UserIcon from './assets/icons/Usuario.svg'
 import { FontProvider, useFontContext } from './contexts/FontContext'
 import { commonHeaderStyle } from './styles/commonHeaderStyle'
@@ -50,6 +51,18 @@ function WorkersRoot() {
         initialParams={{ category: null }}
         options={({ route }) => ({ title: `Buscando ${route.params.category}`})}
         />
+        <Stack.Screen
+        name="User"
+        component={UserScreen}
+        initialParams={{ IdUser: null, username: null }}
+        options={({ route }) => ({ title: `Perfil de ${route.params.username}`})}
+        />
+        <Stack.Screen
+        name="Reviews"
+        component={ReviewsScreen}
+        initialParams={{ category: null, IdUser: null}}
+        options={({ route }) => ({ title: `Reseñas de ${route.params.category}` })}
+        />
     </Stack.Navigator>
   )
 }
@@ -75,6 +88,18 @@ function ProposalsRoot() {
         component={ProposalsScreen}
         initialParams={{ category: null }}
         options={({ route }) => ({ title: `Ofertas de ${route.params.category}`})}
+        />
+        <Stack.Screen
+        name="User"
+        component={UserScreen}
+        initialParams={{ IdUser: null, username: null }}
+        options={({ route }) => ({ title: `Perfil de ${route.params.username}`})}
+        />
+        <Stack.Screen
+        name="Reviews"
+        component={ReviewsScreen}
+        initialParams={{ category: null, IdUser: null}}
+        options={({ route }) => ({ title: `Reseñas de ${route.params.category}` })}
         />
     </Stack.Navigator>
   )
@@ -162,18 +187,11 @@ function TabNavigator({route}) {
         
       }, headerStyle: {backgroundColor: '#308E45'}
     })}>
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          title: 'Bienvenido', 
-          headerStyle: {
-          backgroundColor: commonHeaderStyle.headerStyle.backgroundColor,
-          },
-          headerTintColor: commonHeaderStyle.headerTintColor,
-          headerTitleStyle: {
-            fontFamily: commonHeaderStyle.headerTitleStyle.fontFamily,
-          }}}
+      <Tab.Screen
+        name="ProfileRoot"
+        component={ProfileRoot}
+        initialParams={{IdUser, username}}
+        options={{title: 'Perfil', headerShown: false}}
       />
       <Tab.Screen
         name="WorkersRoot"
@@ -190,12 +208,6 @@ function TabNavigator({route}) {
         component={ChatsRoot}
         options={{title: 'Chats', headerShown: false}}
       />
-      <Tab.Screen
-        name="ProfileRoot"
-        component={ProfileRoot}
-        initialParams={{IdUser, username}}
-        options={{title: 'Perfil', headerShown: false}}
-      />
     </Tab.Navigator>
   )
 }
@@ -210,7 +222,8 @@ const DefaultStack = ({ username, IdUser }) => {
   }
 
   return (
-    <Stack.Navigator screenOptions={commonHeaderStyle}>
+    <Stack.Navigator screenOptions={
+      {safeAreaInsets: { top: 0, bottom: 0 }}}>
       {username && IdUser ? //If the user is not logged in, its data aren't present
         <Stack.Screen
           name="DefaultLogged"
@@ -245,8 +258,8 @@ const DefaultStack = ({ username, IdUser }) => {
   )
 }
 
-
-
+// The splash screen is not hidden by default as the app is currently loading
+SplashScreen.preventAutoHideAsync()
 const App = () => {
   const [username, setUsername] = useState(null)
   const [IdUser, setIdUser] = useState(null)
@@ -255,6 +268,7 @@ const App = () => {
     async function getData (){
       setUsername(await SecureStore.getItemAsync('username'))
       setIdUser(await SecureStore.getItemAsync('id_user'))
+      await SplashScreen.hideAsync()
     }
     getData()
   }, [])
@@ -265,7 +279,6 @@ const App = () => {
         <DefaultStack username={username} IdUser={IdUser} />
       </FontProvider>
     </NavigationContainer>
-    
   )
 }
 

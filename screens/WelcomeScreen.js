@@ -4,14 +4,8 @@ import useFetchUser from '../hooks/useFetchUser'
 // import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useFonts } from 'expo-font'
 
-const HomeScreen = ({navigation}) => {
-  const {username} = useFetchUser()
-  /*const [fontsLoaded, fontError] = useFonts({
-    'Poppins-SemiBold': require('./assets/fonts/Poppins-SemiBold.ttf'),
-  })
-  if (!fontsLoaded || !fontError){
-    return null
-  }*/
+const WelcomeScreen = ({navigation}) => {
+
   return (
     <View>
       <Text>  Bienvenido a Changas {username}!</Text>
@@ -31,4 +25,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default HomeScreen
+export default WelcomeScreen

@@ -7,9 +7,10 @@ import {
   TouchableOpacity, 
   FlatList,
   StyleSheet
-} from 'react-native';
+} from 'react-native'
 import { getCategories } from '../actions/getCategories'
 import CategorySvg from '../components/CategorySvg'
+import nameShortener from '../utils/nameShortener'
 
 const Item = ({ category, type, navigation }) => {
   return (
@@ -23,7 +24,7 @@ const Item = ({ category, type, navigation }) => {
       <View style={styles.iconContainer}>
         <CategorySvg id={category.id} width={40} height={40} />
       </View>
-      <Text style={styles.itemText}>{category.name}</Text>
+      <Text style={styles.itemText}>{nameShortener(category.name)}</Text>
     </TouchableOpacity>
   )
 }
@@ -33,7 +34,7 @@ const CategoriesScreen = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true)
 
   // Retrieve data from params
-  const { type } = route.params;
+  const { type } = route.params
 
   useEffect(() => {
     async function loadCategories() {
@@ -43,7 +44,7 @@ const CategoriesScreen = ({ route, navigation }) => {
       setLoading(false)
     }
     loadCategories()
-  }, []);
+  }, [])
 
   if (loading) {
     return (

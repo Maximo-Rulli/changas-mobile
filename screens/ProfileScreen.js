@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, ScrollView, Button, StyleSheet } from 'react-native'
+import { Text, View, ScrollView, Button, ActivityIndicator } from 'react-native'
 import useFetchUser from '../hooks/useFetchUser'
 import Logout from '../actions/logout'
 import { getUser } from '../actions/getUser'
@@ -32,8 +32,8 @@ const ProfileScreen = ({ navigation }) => {
 
   if (loading) {
     return (
-      <View>
-        <Text>Cargando...</Text>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#0000ff" />
       </View>
     )
   }

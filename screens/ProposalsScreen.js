@@ -4,7 +4,7 @@ import formatDate from '../utils/formatDate'
 import messages from '../utils/messages'
 import { RESULTS_PER_PAGE } from '../constants'
 
-const ProposalsScreen = ({ route }) => {
+const ProposalsScreen = ({ route, navigation }) => {
   const [proposals, setProposals] = useState(null)
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(0)
@@ -54,6 +54,8 @@ const ProposalsScreen = ({ route }) => {
             
             <Text style={styles.label}>Descripción:</Text>
             <Text style={styles.value}>{proposal.description}</Text>
+
+            <Button title='Perfil' onPress={() => navigation.navigate('User', { IdUser: proposal.id_user, username: proposal.username })} />
           </View>
         ))
       ) : (

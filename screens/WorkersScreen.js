@@ -3,7 +3,7 @@ import {Text, View, ScrollView, ActivityIndicator, StyleSheet, Alert, Button} fr
 import messages from '../utils/messages'
 import { RESULTS_PER_PAGE } from '../constants'
 
-const WorkersScreen = ({ route }) => {
+const WorkersScreen = ({ route, navigation }) => {
   const [workers, setWorkers] = useState(null)
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(0)
@@ -62,6 +62,8 @@ const WorkersScreen = ({ route }) => {
             
             <Text style={styles.label}>Puntaje:</Text>
             <Text style={styles.value}>{worker.score}/5</Text>
+
+            <Button title='Perfil' onPress={() => navigation.navigate('User', { IdUser: worker.id_user, username: worker.username })} />
           </View>
         ))
       ) : (

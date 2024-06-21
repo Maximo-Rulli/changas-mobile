@@ -113,7 +113,7 @@ const WorkersFormScreen = ({ navigation, route }) => {
           <Text style={{color: '#AD40AF', fontWeight: '700'}}> Volver</Text>
       </TouchableOpacity>
 
-      <Text style={styles.label}>Elige un tipo de trabajo:</Text>
+      <Text style={styles.label}>Selecciona tu oficio:</Text>
       <View style={styles.pickerContainer}>
         <Picker
           selectedValue={category}
