@@ -13,6 +13,7 @@ import ProfileScreen from './screens/ProfileScreen'
 import ReviewsScreen from './screens/ReviewsScreen'
 import RegisterScreen from './screens/RegisterScreen'
 import ChatsDashboardScreen from './screens/ChatsDashboardScreen'
+import ChatScreen from './screens/ChatScreen'
 import WorkersFormScreen from './screens/WorkersFormScreen'
 import ProposalsFormScreen from './screens/ProposalsFormScreen'
 import UserScreen from './screens/UserScreen'
@@ -160,9 +161,9 @@ function ChatsRoot() {
         />
         <Stack.Screen
         name="Chat"
-        component={WorkersScreen}
-        initialParams={{ category: null }}
-        options={({ route }) => ({ title: `Buscando ${route.params.category}`})}
+        component={ChatScreen}
+        initialParams={{IdChat: null, OtherUsername: null, OtherUser: null, id_user1: null }}
+        options={({ route }) => ({ title: `${route.params.OtherUsername}`})}
         />
     </Stack.Navigator>
   )

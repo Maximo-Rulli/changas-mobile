@@ -18,16 +18,14 @@ const UserScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     async function loadUserData() {
-      if (IdUser) {
-        const user_columns = 'location, birth'
-        const fetchedUser = await getUser(IdUser, user_columns)
-        setUser(fetchedUser || {location: null, birth: null})
-        const proposals_columns = 'category, budget, open_date, location, description'
-        const workers_columns = 'category, hourly_price, attention_hours, score, location, employees, description'
-        setProposals(await getOffers(IdUser, proposals_columns))
-        setJobs(await getJobs(IdUser, workers_columns))
-        setLoading(false)
-      }
+      const user_columns = 'location, birth'
+      const fetchedUser = await getUser(IdUser, user_columns)
+      setUser(fetchedUser || {location: null, birth: null})
+      const proposals_columns = 'category, budget, open_date, location, description'
+      const workers_columns = 'category, hourly_price, attention_hours, score, location, employees, description'
+      setProposals(await getOffers(IdUser, proposals_columns))
+      setJobs(await getJobs(IdUser, workers_columns))
+      setLoading(false)
     }
     loadUserData()
   }, [IdUser])

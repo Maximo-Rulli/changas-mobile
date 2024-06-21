@@ -19,7 +19,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#10A045"
       },
-      "package": "com.changas.changasmobile"
+      "package": "com.changas.changasmobile",
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -27,9 +28,13 @@
     "plugins": [
       "expo-secure-store",
       [
-      "expo-font",
+        "expo-font",
         {
-          "fonts": ["./assets/fonts/Poppins-Regular.ttf", "./assets/fonts/Poppins-Bold.ttf", "./assets/fonts/Poppins-SemiBold.ttf"]
+          "fonts": [
+            "./assets/fonts/Poppins-Regular.ttf",
+            "./assets/fonts/Poppins-Bold.ttf",
+            "./assets/fonts/Poppins-SemiBold.ttf"
+          ]
         }
       ]
     ],
