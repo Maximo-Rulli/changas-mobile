@@ -14,9 +14,10 @@ import ReviewsScreen from './screens/ReviewsScreen'
 import RegisterScreen from './screens/RegisterScreen'
 import ChatsDashboardScreen from './screens/ChatsDashboardScreen'
 import ChatScreen from './screens/ChatScreen'
-import WorkersFormScreen from './screens/WorkersFormScreen'
-import ProposalsFormScreen from './screens/ProposalsFormScreen'
+import WorkerFormScreen from './screens/WorkerFormScreen'
+import ProposalFormScreen from './screens/ProposalFormScreen'
 import UserScreen from './screens/UserScreen'
+import ContractFormScreen from './screens/ContractFormScreen'
 
 // Miscelaneous imports
 import * as SecureStore from 'expo-secure-store'
@@ -131,13 +132,13 @@ function ProfileRoot({route}) {
         <Stack.Screen
         name="ProposalsForm"
         initialParams={{IdUser, username}}
-        component={ProposalsFormScreen}
+        component={ProposalFormScreen}
         options={{title: 'Subir oferta laboral'}}
         />
         <Stack.Screen
         name="WorkersForm"
         initialParams={{IdUser, username}}
-        component={WorkersFormScreen}
+        component={WorkerFormScreen}
         options={{title: 'Subir oficio'}}
         />
     </Stack.Navigator>
@@ -162,8 +163,14 @@ function ChatsRoot() {
         <Stack.Screen
         name="Chat"
         component={ChatScreen}
-        initialParams={{IdChat: null, OtherUsername: null, OtherUser: null, id_user1: null }}
+        initialParams={{IdChat: null, OtherUser: null, OtherUsername: null, id_user1: null }}
         options={({ route }) => ({ title: `${route.params.OtherUsername}`})}
+        />
+        <Stack.Screen
+        name="CreateContract"
+        component={ContractFormScreen}
+        initialParams={{IdUser: null, OtherUser: null}}
+        options={{title: 'Crear contrato'}}
         />
     </Stack.Navigator>
   )

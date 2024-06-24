@@ -5,7 +5,9 @@ import Logout from '../actions/logout'
 import { getUser } from '../actions/getUser'
 import { getOffers } from '../actions/getOffers'
 import { getJobs } from '../actions/getJobs'
-import formatDate from '../utils/formatDate'
+import ProfileCard from '../components/ProfileCard'
+import JobCard from '../components/JobCard'
+import ProposalCard from '../components/ProposalCard'
 
 const ProfileScreen = ({ navigation }) => {
   const { username, IdUser } = useFetchUser()
@@ -72,40 +74,6 @@ const ProfileScreen = ({ navigation }) => {
   )
 }
 
-const ProfileCard = ({ user }) => (
-  <View style={styles.profileCard}>
-    <Text>Email: {user.email}</Text>
-    <Text>Telefono: {user.phone}</Text>
-    <Text>Ubicación: {user.location}</Text>
-    <Text>DNI: {user.dni}</Text>
-    <Text>Nacimiento: {formatDate(user.birth)}</Text>
-  </View>
-)
-
-const JobCard = ({ job, navigation }) => (
-  <View style={styles.card}>
-    <Text>Nombre del oficio: {job.category}</Text>
-    <Text>Precio por hora: ${job.hourly_price}</Text>
-    <Text>Ubicación: {job.location}</Text>
-    <Text>Cantidad de empleados: {job.employees}</Text>
-    <Text>Horas de atención: {job.attention_hours}</Text>
-    <Text>Descripción: {job.description}</Text>
-    <Text>Puntaje: {job.score}/5</Text>
-    <View style={styles.buttonContainer}>
-        <Button title="Reseñas" onPress={() => navigation.navigate('Reviews', { category: job.category })} />
-    </View>
-  </View>
-)
-
-const ProposalCard = ({ proposal }) => (
-  <View style={styles.card}>
-    <Text>Categoría: {proposal.category}</Text>
-    <Text>Presupuesto: ${proposal.budget}</Text>
-    <Text>Ubicación: {proposal.location}</Text>
-    <Text>Fecha de publicación: {formatDate(proposal.open_date.slice(0,10))}</Text>
-    <Text>Descripción: {proposal.description}</Text>
-  </View>
-)
 
 const styles = {
   container: {
@@ -125,16 +93,6 @@ const styles = {
   },
   cardContainer: {
     marginBottom: 20,
-  },
-  profileCard: {
-    backgroundColor: '#E5E7EB',
-    padding: 10,
-    marginBottom: 20,
-  },
-  card: {
-    backgroundColor: '#E5E7EB',
-    padding: 10,
-    marginBottom: 10,
   },
 }
 

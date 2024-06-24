@@ -4,11 +4,9 @@ import { Picker } from '@react-native-picker/picker'
 import {getCategories} from '../actions/getCategories'
 import messages from '../utils/messages'
 
-const WorkersFormScreen = ({ navigation, route }) => {
-  const [hourlyPrice, setHourlyPrice] = useState('')
-  const [category, setCategory] = useState('')
-  const [attentionHours, setAttentionHours] = useState('')
-  const [employees, setEmployees] = useState('')
+const ProposalFormScreen = ({ navigation, route }) => {
+  const [category, setCategory] = useState([])
+  const [budget, setBudget] = useState('')
   const [city, setCity] = useState('')
   const [province, setProvince] = useState('')
   const [country, setCountry] = useState('')
@@ -30,28 +28,19 @@ const WorkersFormScreen = ({ navigation, route }) => {
 
 
   // Auxiliary functions to ensure that the user enters valid params
-  const handlePriceChange = (text) => {
+  const handleBudgetChange = (text) => {
     // Remove any dots from the input to ensure only integer values
     const cleanInput = text.replace(/\./g, '')
-    const price = parseInt(cleanInput, 10)
-    if ((price > 0 && price < 1000000) || text === '') {
-      setHourlyPrice(cleanInput)
+    const budget = parseInt(cleanInput, 10)
+    if ((budget > 0 && budget < 1000000) || text === '') {
+      setBudget(cleanInput)
     }
-  }
-
-  const handleEmployeesChange = (text) => {
-  // Remove any dots from the input to ensure only integer values
-  const cleanInput = text.replace(/\./g, '')
-  const employees = parseInt(cleanInput, 10)
-  if ((employees > 0 && employees < 30000) || text === '') {
-    setEmployees(cleanInput)
-  }
   }
   
   const handleSubmit = async () => {
     setLoading(true)
 
-    if (hourlyPrice === '' || category === '' || attentionHours === '' || employees === '' || city === '' || province === '' || country === '' || description === ''){
+    if (budget === '' || category === '' || city === '' || province === '' || country === '' || description === ''){
       setError(messages.error.form_field_required)
       setLoading(false)
     }
@@ -76,12 +65,12 @@ const WorkersFormScreen = ({ navigation, route }) => {
         const location = unstrucResponse.city + ', ' + unstrucResponse.province + ', ' + unstrucResponse.country
         const lat = unstrucResponse.lat
         const lng = unstrucResponse.lng
-      
-        const sendData = { category, IdUser, hourlyPrice, attentionHours, username, location, lat, lng, employees, description }
+
+        const sendData = { category, IdUser, budget, username, location, lat, lng, description }
       
         setError(null)
       
-        const response = await fetch('https://www.changas.site/api/forms/upload-job', {
+        const response = await fetch('https://www.changas.site/api/forms/upload-offer', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -102,7 +91,7 @@ const WorkersFormScreen = ({ navigation, route }) => {
           })
         }
       }
-    } 
+    }
   }
 
   return (
@@ -113,7 +102,7 @@ const WorkersFormScreen = ({ navigation, route }) => {
           <Text style={{color: '#AD40AF', fontWeight: '700'}}> Volver</Text>
       </TouchableOpacity>
 
-      <Text style={styles.label}>Selecciona tu oficio:</Text>
+      <Text style={styles.label}>Indica al tipo de profesional que buscas:</Text>
       <View style={styles.pickerContainer}>
         <Picker
           selectedValue={category}
@@ -126,23 +115,14 @@ const WorkersFormScreen = ({ navigation, route }) => {
         </Picker>
       </View>
 
-      <Text>Precio por hora:</Text>
+      <Text>Presupuesto:</Text>
       <TextInput
-        label='hourlyPrice'
-        placeholder="1000"
-        value={hourlyPrice}
-        onChangeText={handlePriceChange}
+        label='budget'
+        placeholder="10000"
+        value={budget}
+        onChangeText={handleBudgetChange}
         keyboardType='numeric'
         maxLength={9}
-        style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
-      />
-
-      <Text>Horas de atención:</Text>
-      <TextInput
-        label='attentionHours'
-        placeholder="Lunes a jueves de 8 a 17"
-        onChangeText={text => setAttentionHours(text)}
-        maxLength={40}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
@@ -174,28 +154,17 @@ const WorkersFormScreen = ({ navigation, route }) => {
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
-      <Text>Número de empleados:</Text>
-      <TextInput
-        label='employees'
-        placeholder="1"
-        value={employees}
-        onChangeText={handleEmployeesChange}
-        keyboardType='numeric'
-        maxLength={5}
-        style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
-      />
-
       <Text>Descripción del trabajo:</Text>
       <TextInput
         label='description'
         placeholder="Descripción..."
         onChangeText={text => setDescription(text)}
+        multiline={true}
         maxLength={300}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
-        
-        <Button title="Subir oficio" disabled={loading} onPress={handleSubmit}/>
+        <Button title="Subir oferta laboral" disabled={loading} onPress={handleSubmit}/>
         <View style={[styles.errorContainer, error ? styles.visible : styles.hidden]}>
           <Text style={styles.errorText}>{error}</Text>
         </View>
@@ -246,4 +215,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default WorkersFormScreen;
+export default ProposalFormScreen

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View, SafeAreaView, 
   TouchableOpacity, FlatList, 
-  ActivityIndicator, TextInput, 
+  ActivityIndicator, TextInput, Keyboard,
   StyleSheet, KeyboardAvoidingView, Platform } from 'react-native'
 import useFetchUser from '../hooks/useFetchUser'
 import { getMessages } from '../actions/getMessages'
 import ListIcon from '../assets/icons/Lista.svg'
+import SendIcon from '../assets/icons/Enviar.svg'
 
 const ChatScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true)
   const [messages, setMessages] = useState([])
+  const [keyboardType, setKeyboardType] = useState()
 
   const { IdUser, username } = useFetchUser()
   const { IdChat, OtherUsername, OtherUser, id_user1 } = route.params
@@ -44,6 +46,19 @@ const ChatScreen = ({ navigation, route }) => {
     )
   }
 
+  const handleButtonPress = () => {
+    if (keyboardType === 'contracts'){
+      setKeyboardType('hide')
+    }
+    else if (keyboardType === 'default') {
+      setKeyboardType('contracts')
+      Keyboard.dismiss()
+    }
+    else {
+      setKeyboardType('contracts')
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -55,15 +70,31 @@ const ChatScreen = ({ navigation, route }) => {
       />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position': undefined}>
         <View style={styles.inputContainer}>
-          <TouchableOpacity>
-            <ListIcon style={styles.iconContainer} width={20} height={20} />
+          <TouchableOpacity onPress={handleButtonPress}>
+            <ListIcon style={styles.listIconContainer} width={20} height={20} />
           </TouchableOpacity>
           <TextInput
             style={styles.input}
+            multiline={true}
             placeholder="Escribe un mensaje..."
             placeholderTextColor="#A6E5B1"
+            onFocus={() => {
+              setKeyboardType('default') 
+            }}
           />
+          <TouchableOpacity>
+            <SendIcon style={styles.sendIconContainer} width={30} height={30} />
+          </TouchableOpacity>
         </View>
+        {keyboardType === 'contracts' && 
+        <View style={styles.contractsKeyboard}>
+          <TouchableOpacity style={styles.contractsButton}>
+            <Text>Crear contrato</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.contractsButton}>
+            <Text>Contratos</Text>
+          </TouchableOpacity>
+        </View>}
       </KeyboardAvoidingView>
     </SafeAreaView>
   )
@@ -73,9 +104,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  iconContainer: {
+  listIconContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 10,
+    margin: 10,
+  },
+  sendIconContainer: {
+    flexDirection: 'row',
     padding: 10,
     margin: 10,
   },
@@ -125,6 +161,18 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     marginLeft: 15
+  },
+  contractsKeyboard: {
+    height: 100,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#D9D9D9',
+  },
+  contractsButton: {
+    padding: 10,
+    backgroundColor: '#08A045',
+    borderRadius: 5,
   },
 })
 
