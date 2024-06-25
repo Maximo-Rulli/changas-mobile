@@ -49,7 +49,7 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.cardContainer}>
         {jobs.length === 0
           ? <Text>No has subido trabajos</Text>
-          : jobs.map((job, index) => <JobCard key={index} job={job} navigation={navigation} />)
+          : jobs.map((job, index) => <JobCard key={index} job={job} navigation={navigation} IdUser={IdUser} />)
         }
       </View>
       <View style={styles.buttonContainer}>

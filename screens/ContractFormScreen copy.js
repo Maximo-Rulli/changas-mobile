@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, ScrollView, Button, TextInput, SafeAreaView, TouchableOpacity, StyleSheet, Platform } from 'react-native'
-import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
-
+import { Text, View, ScrollView, Button, TextInput, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native'
+import { Picker } from '@react-native-picker/picker'
+import messages from '../utils/messages'
+import { getJobs } from '../actions/getJobs'
 
 const ContractFormScreen = ({ navigation, route }) => {
-  const [jobtitle, setJobTitle] = useState('')
   const [category, setCategory] = useState([])
   const [budget, setBudget] = useState('')
   const [description, setDescription] = useState('')
@@ -13,41 +13,17 @@ const ContractFormScreen = ({ navigation, route }) => {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  // Variables needed for the Date Picker
-  const [date, setDate] = useState(new Date())
-  const [showDatePickerIOS, setShowDatePickerIOS] = useState(false)
-
   // Retrieve data from params
   const { IdUser, OtherUser } = route.params
 
   // Retrieve Categories from supabase
   useEffect(() => {
     async function loadCategories(){
-      if (userType === 'worker') {
-        setCategories(await getJobs(IdUser,'category'))
-      }
-      else if (userType === 'contractor'){
-        setCategories(await getJobs(OtherUser,'category'))
-      }
+      setCategories(await getJobs(IdUser,'category'))
     }
     loadCategories()
-  }, [userType])
+  }, [])
 
-  const onDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate
-    console.log(selectedDate)
-    setDate(currentDate)
-  }
-
-  const showDatepickerAndroid = () => {
-    DateTimePickerAndroid.open({
-      value: date,
-      onDateChange,
-      mode: 'date',
-      is24Hour: true,
-      minimumDate: (new Date()),
-    })
-  }
 
   // Auxiliary functions to ensure that the user enters valid params
   const handleBudgetChange = (text) => {
@@ -67,7 +43,7 @@ const ContractFormScreen = ({ navigation, route }) => {
       setLoading(false)
     }
     else {
-        const payformat = false
+
         const sendData = { userType, IdUser, OtherUser, category, 
             jobtitle, date, budget, description, payformat }
       
@@ -96,27 +72,22 @@ const ContractFormScreen = ({ navigation, route }) => {
     }
   }
 
-
   return (
-    <SafeAreaView>
-      <Text>Título del trabajo:</Text>
-      <TextInput
-        label='jobtitle'
-        placeholder="Título del trabajo"
-        onChangeText={text => setJobTitle(text)}
-        maxLength={40}
-        style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
-      />
+    <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
 
-      <Text>Descripción del trabajo:</Text>
-      <TextInput
-        label='description'
-        placeholder="Descripción..."
-        onChangeText={text => setDescription(text)}
-        multiline={true}
-        maxLength={300}
-        style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
-      />
+      <Text style={styles.label}>Indica el servicio solicitado/a ofrecer:</Text>
+      {categories.length > 0 ? <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={category}
+          onValueChange={(itemValue) => setCategory(itemValue)}
+          style={styles.picker}
+        >
+          {categories.map((item) => (
+            <Picker.Item label={item.name} value={item.name} key={item.name} />
+          ))}
+        </Picker>
+      </View> : 
+      <Text>No hay oficio registrado</Text>}
 
       <Text>Presupuesto:</Text>
       <TextInput
@@ -129,45 +100,31 @@ const ContractFormScreen = ({ navigation, route }) => {
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
-      {
-      Platform.OS === 'android' ? (
-        // In Android we must use the imperative API
-        <View>
-          <Button onPress={showDatepickerAndroid} title="Elegir fecha" />
-          <Text>Fecha: {date.toLocaleString().slice(0, 10)}</Text>
-        </View>)
-      :
-      (
-      // In IOS we may opt for the non imperative API
-      <View>
-        <Button onPress={() => {setShowDatePickerIOS(true)}} title="Elegir fecha" />
-        {showDatePickerIOS && <DateTimePicker
-          value={date}
-          mode={'date'}
-          is24Hour={true}
-          onChange={onDateChange}
-          minimumDate={new Date()}
-        />}
-        <Text>Fecha: {date.toLocaleString().slice(0, 10)}</Text>
-      </View>
-      )
-      }
 
-      <Button title="Crear contrato" disabled={loading} onPress={handleSubmit}/>
-      <View style={[styles.errorContainer, error ? styles.visible : styles.hidden]}>
-        <Text style={styles.errorText}>{error}</Text>
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          marginBottom: 30,
-        }}>
-      </View>
-      
+      <Text>Descripción del trabajo:</Text>
+      <TextInput
+        label='description'
+        placeholder="Descripción..."
+        onChangeText={text => setDescription(text)}
+        multiline={true}
+        maxLength={300}
+        style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
+      />
+
+        <Button title="Crear contrato" disabled={loading} onPress={handleSubmit}/>
+        <View style={[styles.errorContainer, error ? styles.visible : styles.hidden]}>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginBottom: 30,
+          }}>
+        </View>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -88,7 +88,7 @@ const ChatScreen = ({ navigation, route }) => {
         </View>
         {keyboardType === 'contracts' && 
         <View style={styles.contractsKeyboard}>
-          <TouchableOpacity style={styles.contractsButton}>
+          <TouchableOpacity onPress={() => navigation.navigate('CreateContract')} style={styles.contractsButton}>
             <Text>Crear contrato</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.contractsButton}>

@@ -9,7 +9,7 @@ const ReviewsScreen = ({ route }) => {
   
   // Retrieve data from params
   const { category, IdUser } = route.params
-  console.log('Entramos a las reseñas ', IdUser)
+
   useEffect(() => {
     async function loadReviews() {
       const fetchedReviews = await getWorkerRatings(IdUser, category)
