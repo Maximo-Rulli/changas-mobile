@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Text, View, ScrollView, Button, TextInput, SafeAreaView, TouchableOpacity, StyleSheet, Platform } from 'react-native'
-import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import { Picker } from '@react-native-picker/picker'
+import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
+import RadioGroup from 'react-native-radio-buttons-group'
+import { getJobs } from '../actions/getJobs'
 
 
 const ContractFormScreen = ({ navigation, route }) => {
@@ -20,29 +23,44 @@ const ContractFormScreen = ({ navigation, route }) => {
   // Retrieve data from params
   const { IdUser, OtherUser } = route.params
 
+  // Define Radiobuttons
+  const radioButtons = useMemo(() => ([
+    {
+        id: 'worker',
+        label: 'Ofrezco',
+        value: 'worker'
+    },
+    {
+        id: 'contractor',
+        label: 'Solicito',
+        value: 'contractor'
+    }
+    ]), [])
+
   // Retrieve Categories from supabase
   useEffect(() => {
     async function loadCategories(){
       if (userType === 'worker') {
+        console.log(IdUser)
+        console.log(await getJobs(IdUser,'category'))
         setCategories(await getJobs(IdUser,'category'))
       }
       else if (userType === 'contractor'){
         setCategories(await getJobs(OtherUser,'category'))
       }
     }
+    console.log(categories)
     loadCategories()
   }, [userType])
 
   const onDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate
-    console.log(selectedDate)
-    setDate(currentDate)
+    setDate(selectedDate)
   }
 
   const showDatepickerAndroid = () => {
     DateTimePickerAndroid.open({
       value: date,
-      onDateChange,
+      onChange: onDateChange,
       mode: 'date',
       is24Hour: true,
       minimumDate: (new Date()),
@@ -99,6 +117,27 @@ const ContractFormScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView>
+      <Text>¿Ofrece un servicio o lo solicita?</Text>
+      <RadioGroup 
+        radioButtons={radioButtons} 
+        onPress={setUserType}
+        selectedId={userType}
+        layout='row'
+      />
+
+      <Text style={styles.label}>Selecciona el servicio:</Text>
+      {categories && <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={category}
+          onValueChange={(itemValue) => setCategory(itemValue)}
+          style={styles.picker}
+        >
+          {categories.map((item) => (
+            <Picker.Item label={item.category} value={item.category} key={item.category} />
+          ))}
+        </Picker>
+      </View>}
+
       <Text>Título del trabajo:</Text>
       <TextInput
         label='jobtitle'
