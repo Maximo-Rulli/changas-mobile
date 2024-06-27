@@ -225,9 +225,14 @@ function TabNavigator({route}) {
 const DefaultStack = ({ username, IdUser }) => {
   const { fontsLoaded } = useFontContext()
 
-  if (!fontsLoaded) {
-    return null
-  }
+  useEffect(() => {
+    async function hideSplash (){
+      if (fontsLoaded){
+        await SplashScreen.hideAsync()
+      }
+    }
+    hideSplash()
+  }, [fontsLoaded])
 
   return (
     <Stack.Navigator screenOptions={
@@ -276,7 +281,6 @@ const App = () => {
     async function getData (){
       setUsername(await SecureStore.getItemAsync('username'))
       setIdUser(await SecureStore.getItemAsync('id_user'))
-      await SplashScreen.hideAsync()
     }
     getData()
   }, [])

@@ -23,10 +23,22 @@ const WorkerFormScreen = ({ navigation, route }) => {
   // Retrieve Categories from supabase
   useEffect(() => {
     async function loadCategories(){
+      setLoading(true)
       setCategories(await getCategories('name'))
+      setLoading(false)
     }
     loadCategories()
   }, [])
+
+  // Set the current category to the first fetched category
+  useEffect(() => {
+    async function autosetCategory(){
+      if (categories.length !== 0){
+        setCategory(categories[0].category)
+      }
+    }
+    autosetCategory()
+  }, [categories])
 
 
   // Auxiliary functions to ensure that the user enters valid params
@@ -209,8 +221,8 @@ const WorkerFormScreen = ({ navigation, route }) => {
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -247,4 +259,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default WorkerFormScreen;
+export default WorkerFormScreen

@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Text, View, ScrollView, Button, TextInput, SafeAreaView, TouchableOpacity, StyleSheet, Platform } from 'react-native'
+import { Text, View, ScrollView, Button, TextInput, StyleSheet, Platform } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
 import RadioGroup from 'react-native-radio-buttons-group'
 import { getJobs } from '../actions/getJobs'
+import messages from '../utils/messages'
 
 
 const ContractFormScreen = ({ navigation, route }) => {
   const [jobtitle, setJobTitle] = useState('')
-  const [category, setCategory] = useState([])
+  const [category, setCategory] = useState('')
   const [budget, setBudget] = useState('')
   const [description, setDescription] = useState('')
   const [userType, setUserType] = useState('')
@@ -40,23 +41,35 @@ const ContractFormScreen = ({ navigation, route }) => {
   // Retrieve Categories from supabase
   useEffect(() => {
     async function loadCategories(){
+      setLoading(true)
+
       if (userType === 'worker') {
-        console.log(IdUser)
-        console.log(await getJobs(IdUser,'category'))
         setCategories(await getJobs(IdUser,'category'))
       }
       else if (userType === 'contractor'){
         setCategories(await getJobs(OtherUser,'category'))
       }
+
+      setLoading(false)
     }
-    console.log(categories)
     loadCategories()
   }, [userType])
+
+  // Set the current category to the first fetched category
+  useEffect(() => {
+    async function autosetCategory(){
+      if (categories.length !== 0){
+        setCategory(categories[0].category)
+      }
+    }
+    autosetCategory()
+  }, [categories])
 
   const onDateChange = (event, selectedDate) => {
     setDate(selectedDate)
   }
 
+  // Define DatePicker for Android (imperative API)
   const showDatepickerAndroid = () => {
     DateTimePickerAndroid.open({
       value: date,
@@ -80,7 +93,7 @@ const ContractFormScreen = ({ navigation, route }) => {
   const handleSubmit = async () => {
     setLoading(true)
 
-    if (budget === '' || category === '' || description === ''){
+    if (budget === '' || category === '' || description === '' || userType === '' || jobtitle === '' || date === ''){
       setError(messages.error.form_field_required)
       setLoading(false)
     }
@@ -91,7 +104,7 @@ const ContractFormScreen = ({ navigation, route }) => {
       
         setError(null)
       
-        const response = await fetch('https://www.changas.site/api/forms/upload-offer', {
+        const response = await fetch('https://www.changas.site/api/forms/post-contract', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -99,24 +112,22 @@ const ContractFormScreen = ({ navigation, route }) => {
           body: JSON.stringify(sendData)
         })
         const data = await response.json()
+        console.log(data)
       
         setLoading(false)
       
-        if (data.error) {
+        if (data.status !== 200) {
           setError(data.error)
         }
-        if (data.message) {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'Profile' }],
-          })
+        else {
+          navigation.goBack()
         }
     }
   }
 
 
   return (
-    <SafeAreaView>
+    <ScrollView>
       <Text>¿Ofrece un servicio o lo solicita?</Text>
       <RadioGroup 
         radioButtons={radioButtons} 
@@ -204,7 +215,7 @@ const ContractFormScreen = ({ navigation, route }) => {
         }}>
       </View>
       
-    </SafeAreaView>
+    </ScrollView>
   )
 }
 
