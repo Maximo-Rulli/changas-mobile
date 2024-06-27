@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Text, View, SafeAreaView, 
   TouchableOpacity, FlatList, 
   ActivityIndicator, TextInput, Keyboard,
@@ -16,6 +16,9 @@ const ChatScreen = ({ navigation, route }) => {
   const { IdUser, username } = useFetchUser()
   const { IdChat, OtherUsername, OtherUser, id_user1 } = route.params
   const UserNumber = (OtherUser !== id_user1 ? 1 : 2)
+
+  // Setup scrollviewref to automatically scroll down
+  const scrollViewRef = useRef()
 
   useEffect(() => {
     async function loadMessages() {
@@ -60,13 +63,14 @@ const ChatScreen = ({ navigation, route }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
       <FlatList
-          data={messages}
+          data={[...messages].reverse()}
           renderItem={renderMessage}
           keyExtractor={(_, index) => index.toString()}
           contentContainerStyle={styles.messagesContainer}
           automaticallyAdjustKeyboardInsets
+          inverted={true}
       />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position': undefined}>
         <View style={styles.inputContainer}>
