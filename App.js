@@ -222,12 +222,12 @@ function TabNavigator({route}) {
 
 
 
-const DefaultStack = ({ username, IdUser }) => {
+const DefaultStack = ({ username, IdUser, loaded }) => {
   const { fontsLoaded } = useFontContext()
 
   useEffect(() => {
     async function hideSplash (){
-      if (fontsLoaded){
+      if (fontsLoaded && loaded){
         await SplashScreen.hideAsync()
       }
     }
@@ -274,6 +274,7 @@ const DefaultStack = ({ username, IdUser }) => {
 // The splash screen is not hidden by default as the app is currently loading
 SplashScreen.preventAutoHideAsync()
 const App = () => {
+  const [loaded, setLoaded] = useState(false)
   const [username, setUsername] = useState(null)
   const [IdUser, setIdUser] = useState(null)
 
@@ -281,6 +282,7 @@ const App = () => {
     async function getData (){
       setUsername(await SecureStore.getItemAsync('username'))
       setIdUser(await SecureStore.getItemAsync('id_user'))
+      setLoaded(true)
     }
     getData()
   }, [])
@@ -288,7 +290,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <FontProvider>
-        <DefaultStack username={username} IdUser={IdUser} />
+        <DefaultStack username={username} IdUser={IdUser} loaded={loaded} />
       </FontProvider>
     </NavigationContainer>
   )
