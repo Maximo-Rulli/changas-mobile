@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View, TouchableOpacity, ScrollView, StyleSheet } from 'react-native'
+import { useIsFocused } from '@react-navigation/native'
 import { getUserChats } from '../actions/getUserChats'
 import useFetchUser from '../hooks/useFetchUser'
 import chatFormatDate from '../utils/chatFormatDate'
@@ -10,17 +11,20 @@ const ChatsDashboardScreen = ({navigation}) => {
   const [loading, setLoading] = useState(true)
   const [chats, setChats] = useState()
   const {IdUser, username} = useFetchUser()
+  
+  // Check if screen is focused to re-render page
+  const isFocused = useIsFocused()
 
   useEffect(() => {
     async function loadUserChats() {
-      if (IdUser) {
+      if (IdUser && isFocused) {
         setLoading(true)
         setChats(await getUserChats(IdUser))
         setLoading(false)
       }
     }
     loadUserChats()
-  }, [IdUser])
+  }, [IdUser, isFocused])
 
   if (loading) {
     return (

@@ -232,7 +232,7 @@ const DefaultStack = ({ username, IdUser, loaded }) => {
       }
     }
     hideSplash()
-  }, [fontsLoaded])
+  }, [fontsLoaded, loaded])
 
   return (
     <Stack.Navigator screenOptions={

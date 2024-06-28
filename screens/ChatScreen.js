@@ -5,6 +5,7 @@ import { Text, View, SafeAreaView,
   StyleSheet, KeyboardAvoidingView, Platform } from 'react-native'
 import useFetchUser from '../hooks/useFetchUser'
 import { getMessages } from '../actions/getMessages'
+import { seeChat } from '../actions/seeChat'
 import ListIcon from '../assets/icons/Lista.svg'
 import SendIcon from '../assets/icons/Enviar.svg'
 import LoadingScreen from './LoadingScreen'
@@ -14,8 +15,8 @@ const ChatScreen = ({ navigation, route }) => {
   const [messages, setMessages] = useState([])
   const [keyboardType, setKeyboardType] = useState()
 
-  const { IdUser, username } = useFetchUser()
-  const { IdChat, OtherUsername, OtherUser, id_user1 } = route.params
+  const { IdUser } = useFetchUser()
+  const { IdChat, OtherUser, id_user1 } = route.params
   const UserNumber = (OtherUser !== id_user1 ? 1 : 2)
 
   // Setup scrollviewref to automatically scroll down
@@ -26,6 +27,7 @@ const ChatScreen = ({ navigation, route }) => {
       if (IdUser) {
         setLoading(true)
         const fetchedMessages = await getMessages(IdChat)
+        await seeChat(IdChat, UserNumber)
         setMessages(fetchedMessages.content)
         setLoading(false)
       }
@@ -76,7 +78,7 @@ const ChatScreen = ({ navigation, route }) => {
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position': undefined}>
         <View style={styles.inputContainer}>
           <TouchableOpacity onPress={handleButtonPress}>
-            <ListIcon style={styles.listIconContainer} width={20} height={20} />
+            <ListIcon style={styles.listIconContainer} width={30} height={30} />
           </TouchableOpacity>
           <TextInput
             style={styles.input}
@@ -88,7 +90,7 @@ const ChatScreen = ({ navigation, route }) => {
             }}
           />
           <TouchableOpacity>
-            <SendIcon style={styles.sendIconContainer} width={30} height={30} />
+            <SendIcon style={styles.sendIconContainer} width={40} height={40} />
           </TouchableOpacity>
         </View>
         {keyboardType === 'contracts' && 
