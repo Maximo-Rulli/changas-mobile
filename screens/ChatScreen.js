@@ -16,7 +16,7 @@ const ChatScreen = ({ navigation, route }) => {
   const [keyboardType, setKeyboardType] = useState()
 
   const { IdUser } = useFetchUser()
-  const { IdChat, OtherUser, id_user1 } = route.params
+  const { IdChat, OtherUsername, OtherUser, id_user1 } = route.params
   const UserNumber = (OtherUser !== id_user1 ? 1 : 2)
 
   // Setup scrollviewref to automatically scroll down
@@ -98,7 +98,7 @@ const ChatScreen = ({ navigation, route }) => {
           <TouchableOpacity onPress={() => navigation.navigate('CreateContract', { IdUser: IdUser, OtherUser: OtherUser })} style={styles.contractsButton}>
             <Text>Crear contrato</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.contractsButton}>
+          <TouchableOpacity onPress={() => navigation.navigate('UsersContracts', { IdUser: IdUser, OtherUser: OtherUser, OtherUsername: OtherUsername })} style={styles.contractsButton}>
             <Text>Contratos</Text>
           </TouchableOpacity>
         </View>}
@@ -115,7 +115,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    margin: 10,
+    marginVertical: 10,
+    marginLeft: 15,
+    marginRight: 0
   },
   sendIconContainer: {
     flexDirection: 'row',
@@ -164,7 +166,8 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     backgroundColor: '#267044',
     marginLeft: 20,
-    borderRadius: 5
+    borderRadius: 5,
+    padding: 7
   },
   iconContainer: {
     marginLeft: 15

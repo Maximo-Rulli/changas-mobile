@@ -92,10 +92,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#888',
   },
-  lastMessage: {
-    fontSize: 12,
-    color: '#888',
-  },
   onlineIndicator: {
     width: 10,
     height: 10,

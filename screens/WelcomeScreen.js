@@ -1,8 +1,5 @@
 import React from 'react'
 import {Text, View, Button, StyleSheet } from 'react-native'
-import useFetchUser from '../hooks/useFetchUser'
-// import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useFonts } from 'expo-font'
 
 const WelcomeScreen = ({navigation}) => {
 
