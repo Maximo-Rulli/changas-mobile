@@ -3,7 +3,6 @@ import {
   Text,
   View,
   SafeAreaView, 
-  ActivityIndicator, 
   TouchableOpacity, 
   FlatList,
   StyleSheet
@@ -11,6 +10,7 @@ import {
 import { getCategories } from '../actions/getCategories'
 import CategorySvg from '../components/CategorySvg'
 import nameShortener from '../utils/nameShortener'
+import LoadingScreen from './LoadingScreen'
 
 const Item = ({ category, type, navigation }) => {
   return (
@@ -49,7 +49,7 @@ const CategoriesScreen = ({ route, navigation }) => {
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <LoadingScreen/>
       </View>
     )
   }

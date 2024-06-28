@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, TouchableOpacity, ScrollView, ActivityIndicator, StyleSheet } from 'react-native'
+import { Text, View, TouchableOpacity, ScrollView, StyleSheet } from 'react-native'
 import { getUserChats } from '../actions/getUserChats'
 import useFetchUser from '../hooks/useFetchUser'
 import chatFormatDate from '../utils/chatFormatDate'
 import UserIcon from '../assets/icons/Usuario.svg'
+import LoadingScreen from './LoadingScreen'
 
 const ChatsDashboardScreen = ({navigation}) => {
   const [loading, setLoading] = useState(true)
@@ -24,7 +25,7 @@ const ChatsDashboardScreen = ({navigation}) => {
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <LoadingScreen/>
       </View>
     )
   }

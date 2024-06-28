@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, ScrollView, Button, ActivityIndicator } from 'react-native'
+import { Text, View, ScrollView } from 'react-native'
 import { getUser } from '../actions/getUser'
 import { getOffers } from '../actions/getOffers'
 import { getJobs } from '../actions/getJobs'
 import ProfileCard from '../components/ProfileCard'
 import JobCard from '../components/JobCard'
 import ProposalCard from '../components/ProposalCard'
+import LoadingScreen from './LoadingScreen'
 
 const UserScreen = ({ navigation, route }) => {
   const [user, setUser] = useState({location: null, birth: null})
@@ -33,7 +34,7 @@ const UserScreen = ({ navigation, route }) => {
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <LoadingScreen/>
       </View>
     )
   }

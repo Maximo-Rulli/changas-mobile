@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, ScrollView, Button, ActivityIndicator } from 'react-native'
+import { Text, View, ScrollView, Button } from 'react-native'
 import useFetchUser from '../hooks/useFetchUser'
 import Logout from '../actions/logout'
 import { getUser } from '../actions/getUser'
@@ -8,6 +8,7 @@ import { getJobs } from '../actions/getJobs'
 import ProfileCard from '../components/ProfileCard'
 import JobCard from '../components/JobCard'
 import ProposalCard from '../components/ProposalCard'
+import LoadingScreen from './LoadingScreen'
 
 const ProfileScreen = ({ navigation }) => {
   const { username, IdUser } = useFetchUser()
@@ -35,7 +36,7 @@ const ProfileScreen = ({ navigation }) => {
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <LoadingScreen/>
       </View>
     )
   }

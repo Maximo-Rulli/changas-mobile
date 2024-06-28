@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import {Text, View, ScrollView, ActivityIndicator, StyleSheet, Alert, Button} from 'react-native'
+import {Text, View, ScrollView, StyleSheet, Alert, Button} from 'react-native'
 import messages from '../utils/messages'
 import { RESULTS_PER_PAGE } from '../constants'
+import LoadingScreen from './LoadingScreen'
 
 const WorkersScreen = ({ route, navigation }) => {
   const [workers, setWorkers] = useState(null)
@@ -32,7 +33,7 @@ const WorkersScreen = ({ route, navigation }) => {
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <LoadingScreen/>
       </View>
     );
   }

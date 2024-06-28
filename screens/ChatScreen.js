@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Text, View, SafeAreaView, 
   TouchableOpacity, FlatList, 
-  ActivityIndicator, TextInput, Keyboard,
+  TextInput, Keyboard,
   StyleSheet, KeyboardAvoidingView, Platform } from 'react-native'
 import useFetchUser from '../hooks/useFetchUser'
 import { getMessages } from '../actions/getMessages'
 import ListIcon from '../assets/icons/Lista.svg'
 import SendIcon from '../assets/icons/Enviar.svg'
+import LoadingScreen from './LoadingScreen'
 
 const ChatScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true)
@@ -35,7 +36,7 @@ const ChatScreen = ({ navigation, route }) => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <LoadingScreen/>
       </View>
     )
   }

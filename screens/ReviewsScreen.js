@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, ScrollView, ActivityIndicator, StyleSheet } from 'react-native'
+import { Text, View, ScrollView, StyleSheet } from 'react-native'
 import { getWorkerRatings } from '../actions/getWorkerRatings'
 import formatDate from '../utils/formatDate'
+import LoadingScreen from './LoadingScreen'
 
 const ReviewsScreen = ({ route }) => {
   const [reviews, setReviews] = useState(null)
@@ -22,7 +23,7 @@ const ReviewsScreen = ({ route }) => {
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <LoadingScreen/>
       </View>
     )
   }
