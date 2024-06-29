@@ -287,8 +287,10 @@ const App = () => {
 
   useEffect(() => {
     async function getData (){
-      setUsername(await SecureStore.getItemAsync('username'))
-      setIdUser(await SecureStore.getItemAsync('id_user'))
+      const username = await SecureStore.getItemAsync('username')
+      const IdUser = await SecureStore.getItemAsync('id_user')
+      setUsername(username)
+      setIdUser(IdUser)
       setLoaded(true)
     }
     getData()

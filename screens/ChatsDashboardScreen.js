@@ -9,7 +9,7 @@ import LoadingScreen from './LoadingScreen'
 
 const ChatsDashboardScreen = ({navigation}) => {
   const [loading, setLoading] = useState(true)
-  const [chats, setChats] = useState()
+  const [chats, setChats] = useState(null)
   const {IdUser, username} = useFetchUser()
   
   // Check if screen is focused to re-render page
@@ -17,10 +17,13 @@ const ChatsDashboardScreen = ({navigation}) => {
 
   useEffect(() => {
     async function loadUserChats() {
-      if (IdUser && isFocused) {
+      if (IdUser && chats === null) {
         setLoading(true)
         setChats(await getUserChats(IdUser))
         setLoading(false)
+      }
+      else if (IdUser && chats !== null && isFocused) {
+        setChats(await getUserChats(IdUser))
       }
     }
     loadUserChats()
