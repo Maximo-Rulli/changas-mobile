@@ -229,17 +229,18 @@ function TabNavigator({route}) {
 
 
 
-const DefaultStack = ({ username, IdUser, loaded }) => {
+const DefaultStack = ({ username, IdUser }) => {
   const { fontsLoaded } = useFontContext()
 
   useEffect(() => {
     async function hideSplash (){
-      if (fontsLoaded && loaded){
+      if (fontsLoaded){
+        // console.log('Los datos con todo cargado son ', username, IdUser)
         await SplashScreen.hideAsync()
       }
     }
     hideSplash()
-  }, [fontsLoaded, loaded])
+  }, [fontsLoaded])
 
   return (
     <Stack.Navigator screenOptions={
@@ -290,7 +291,9 @@ const App = () => {
       const username = await SecureStore.getItemAsync('username')
       const IdUser = await SecureStore.getItemAsync('id_user')
       setUsername(username)
+      // console.log('El nombre de usuario recuperado es ' + username)
       setIdUser(IdUser)
+      // console.log('El ID de usuario recuperado es ' + IdUser)
       setLoaded(true)
     }
     getData()
@@ -299,7 +302,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <FontProvider>
-        <DefaultStack username={username} IdUser={IdUser} loaded={loaded} />
+        {loaded && <DefaultStack username={username} IdUser={IdUser}/>}
       </FontProvider>
     </NavigationContainer>
   )
