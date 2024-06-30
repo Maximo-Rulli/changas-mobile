@@ -4,7 +4,7 @@ import { getContract } from '../actions/getContract'
 import messages from '../utils/messages'
 
 
-const ReviewScreen = ({ navigation, route }) => {
+const ReviewFormScreen = ({ navigation, route }) => {
   const [score, setScore] = useState('')
   const [ReviewerId, setReviewerId] = useState('')
   const [ReviewedId, setReviewedId] = useState('')
@@ -148,4 +148,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ReviewScreen
+export default ReviewFormScreen

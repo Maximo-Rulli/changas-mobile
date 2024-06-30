@@ -20,7 +20,7 @@ import UserScreen from './screens/UserScreen'
 import ContractFormScreen from './screens/ContractFormScreen'
 import UsersContractsScreen from './screens/UsersContractsScreen'
 import CounterdealScreen from './screens/CounterdealScreen'
-import ReviewScreen from './screens/ReviewScreen'
+import ReviewFormScreen from './screens/ReviewFormScreen'
 
 // Miscelaneous imports
 import * as SecureStore from 'expo-secure-store'
@@ -189,7 +189,7 @@ function ChatsRoot() {
         />
         <Stack.Screen
         name="Review"
-        component={ReviewScreen}
+        component={ReviewFormScreen}
         initialParams={{ ReviewedUsername: null, IdContract: null, category: null}}
         options={({ route }) => ({ title: `Reseñar a ${route.params.ReviewedUsername}` })}
         />
