@@ -19,6 +19,7 @@ import ProposalFormScreen from './screens/ProposalFormScreen'
 import UserScreen from './screens/UserScreen'
 import ContractFormScreen from './screens/ContractFormScreen'
 import UsersContractsScreen from './screens/UsersContractsScreen'
+import CounterdealScreen from './screens/CounterdealScreen'
 
 // Miscelaneous imports
 import * as SecureStore from 'expo-secure-store'
@@ -178,6 +179,12 @@ function ChatsRoot() {
         component={UsersContractsScreen}
         initialParams={{IdUser: null, OtherUser: null, OtherUsername: null}}
         options={({ route }) => ({ title: `Contratos con ${route.params.OtherUsername}`})}
+        />
+        <Stack.Screen
+        name="Counterdeal"
+        component={CounterdealScreen}
+        initialParams={{IdUser: null, IdContract: null, workerTurn: null, jobtitle: null, category: null, budget: null, description: null, date: null}}
+        options={{title: 'Contraofertar'}}
         />
     </Stack.Navigator>
   )
