@@ -7,7 +7,6 @@ import { getContract } from '../actions/getContract'
 
 const CounterdealScreen = ({ navigation, route }) => {
   const [jobtitle, setJobTitle] = useState('')
-  const [category, setCategory] = useState('')
   const [budget, setBudget] = useState('')
   const [description, setDescription] = useState('')
   const [IdWorker, setIdWorker] = useState('')
@@ -20,7 +19,7 @@ const CounterdealScreen = ({ navigation, route }) => {
   const [showDatePickerIOS, setShowDatePickerIOS] = useState(false)
 
   // Retrieve data from params
-  const { IdUser, IdContract, workerTurn } = route.params
+  const { IdUser, IdContract, workerTurn, category } = route.params
 
   // Retrieve contract from supabase
   useEffect(() => {
@@ -29,7 +28,6 @@ const CounterdealScreen = ({ navigation, route }) => {
       const columns = 'id_worker, id_contractor'
       const fetchedIds = await getContract(IdContract, columns)
       setJobTitle(route.params.jobtitle)
-      setCategory(route.params.category)
       setBudget(route.params.budget)
       setDescription(route.params.description)
       setDate(route.params.date)

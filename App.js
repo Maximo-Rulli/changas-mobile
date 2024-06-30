@@ -10,7 +10,7 @@ import WorkersScreen from './screens/WorkersScreen'
 import CategoriesScreen from './screens/CategoriesScreen'
 import ProposalsScreen from './screens/ProposalsScreen'
 import ProfileScreen from './screens/ProfileScreen'
-import ReviewsScreen from './screens/ReviewsScreen'
+import UserReviewsScreen from './screens/UserReviewsScreen'
 import RegisterScreen from './screens/RegisterScreen'
 import ChatsDashboardScreen from './screens/ChatsDashboardScreen'
 import ChatScreen from './screens/ChatScreen'
@@ -20,6 +20,7 @@ import UserScreen from './screens/UserScreen'
 import ContractFormScreen from './screens/ContractFormScreen'
 import UsersContractsScreen from './screens/UsersContractsScreen'
 import CounterdealScreen from './screens/CounterdealScreen'
+import ReviewScreen from './screens/ReviewScreen'
 
 // Miscelaneous imports
 import * as SecureStore from 'expo-secure-store'
@@ -63,7 +64,7 @@ function WorkersRoot() {
         />
         <Stack.Screen
         name="Reviews"
-        component={ReviewsScreen}
+        component={UserReviewsScreen}
         initialParams={{ category: null, IdUser: null}}
         options={({ route }) => ({ title: `Reseñas de ${route.params.category}` })}
         />
@@ -101,7 +102,7 @@ function ProposalsRoot() {
         />
         <Stack.Screen
         name="Reviews"
-        component={ReviewsScreen}
+        component={UserReviewsScreen}
         initialParams={{ category: null, IdUser: null}}
         options={({ route }) => ({ title: `Reseñas de ${route.params.category}` })}
         />
@@ -126,8 +127,8 @@ function ProfileRoot({route}) {
         options={{title: 'Perfil'}}
         />
         <Stack.Screen
-        name="Reviews"
-        component={ReviewsScreen}
+        name="UserReviews"
+        component={UserReviewsScreen}
         initialParams={{ category: null, IdUser}}
         options={({ route }) => ({ title: `Reseñas de ${route.params.category}` })}
         />
@@ -185,6 +186,12 @@ function ChatsRoot() {
         component={CounterdealScreen}
         initialParams={{IdUser: null, IdContract: null, workerTurn: null, jobtitle: null, category: null, budget: null, description: null, date: null}}
         options={{title: 'Contraofertar'}}
+        />
+        <Stack.Screen
+        name="Review"
+        component={ReviewScreen}
+        initialParams={{ ReviewedUsername: null, IdContract: null, category: null}}
+        options={({ route }) => ({ title: `Reseñar a ${route.params.ReviewedUsername}` })}
         />
     </Stack.Navigator>
   )

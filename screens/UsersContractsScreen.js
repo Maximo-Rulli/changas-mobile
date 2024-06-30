@@ -12,7 +12,7 @@ const UsersContractsScreen = ({ navigation, route }) => {
   const [contracts, setContracts] = useState(null)
 
   const { IdUser } = useFetchUser()
-  const { OtherUser } = route.params
+  const { OtherUser, OtherUsername } = route.params
 
   // Check if screen is focused to re-render page
   const isFocused = useIsFocused()
@@ -49,7 +49,7 @@ const UsersContractsScreen = ({ navigation, route }) => {
         <Text style={styles.contractDetail}>Presupuesto: {item.budget}</Text>
         <Text style={styles.contractDetail}>Descripción: {item.description}</Text>
         <Text style={styles.contractDetail}>Fecha: {formatDate(item.date)}</Text>
-        <DealLink contract={item} IdUser={IdUser} onContractUpdate={loadContracts} navigation={navigation}/>
+        <DealLink contract={item} IdUser={IdUser} OtherUsername={OtherUsername} onContractUpdate={loadContracts} navigation={navigation}/>
       </View>
     )
   }

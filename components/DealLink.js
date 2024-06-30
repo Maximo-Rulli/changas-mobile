@@ -35,7 +35,7 @@ const acceptContract = async (IdContract, IdUser, IdWorker, IdContractor, worker
   }
 
 
-function DealLink({ contract, IdUser, onContractUpdate, navigation }) {
+function DealLink({ contract, IdUser, OtherUsername, onContractUpdate, navigation }) {
   // This state is to disable the buttons
   const [loadingLink, setLoadingLink] = useState(false)
 
@@ -50,7 +50,9 @@ function DealLink({ contract, IdUser, onContractUpdate, navigation }) {
   const isExpired = now > contractDate && !contract.closed && isUserTurn
 
   const ShowReviewLink = () => (
-    <TouchableOpacity style={styles.linkButton} disabled={loadingLink}>
+    <TouchableOpacity style={styles.linkButton} disabled={loadingLink} 
+    onPress={() => {navigation.navigate('Review', {IdContract: contract.id_contract, 
+    ReviewedUsername: OtherUsername, category: contract.category})}}>
       <Text style={styles.linkText}>Reseñar</Text>
     </TouchableOpacity>
   )

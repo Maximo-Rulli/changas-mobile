@@ -11,7 +11,7 @@ const JobCard = ({ job, navigation, IdUser }) => (
       <Text>Descripción: {job.description}</Text>
       <Text>Puntaje: {job.score}/5</Text>
       <View style={styles.buttonContainer}>
-          <Button title="Reseñas" onPress={() => navigation.navigate('Reviews', { category: job.category, IdUser: IdUser })} />
+          <Button title="Reseñas" onPress={() => navigation.navigate('UserReviews', { category: job.category, IdUser: IdUser })} />
       </View>
     </View>
 )

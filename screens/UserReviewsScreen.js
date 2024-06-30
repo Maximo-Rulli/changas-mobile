@@ -4,7 +4,7 @@ import { getWorkerRatings } from '../actions/getWorkerRatings'
 import formatDate from '../utils/formatDate'
 import LoadingScreen from './LoadingScreen'
 
-const ReviewsScreen = ({ route }) => {
+const UserReviewsScreen = ({ route }) => {
   const [reviews, setReviews] = useState(null)
   const [loading, setLoading] = useState(true)
   
@@ -85,4 +85,4 @@ noReviewsText: {
   },
 })
 
-export default ReviewsScreen
+export default UserReviewsScreen
