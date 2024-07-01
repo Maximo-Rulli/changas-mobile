@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, ScrollView, Button, TextInput, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native'
+import { Text, View, ScrollView, Button, 
+  TextInput, SafeAreaView, StyleSheet } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import {getCategories} from '../actions/getCategories'
+import loadProvinces from '../utils/loadProvinces'
+import loadCities from '../utils/loadCities'
 import messages from '../utils/messages'
 
 const WorkerFormScreen = ({ navigation, route }) => {
@@ -9,9 +12,15 @@ const WorkerFormScreen = ({ navigation, route }) => {
   const [category, setCategory] = useState('')
   const [attentionHours, setAttentionHours] = useState('')
   const [employees, setEmployees] = useState('')
+  
+  // Cities is a variable to store the current province cities, not the selected one
+  const [provinceCities, setProvinceCities] = useState('')
+  const [cities, setCities] = useState('')
   const [city, setCity] = useState('')
+  const [filterCity, setFilterCity] = useState('')
+
   const [province, setProvince] = useState('')
-  const [country, setCountry] = useState('')
+  const [country, setCountry] = useState('Argentina')
   const [description, setDescription] = useState('')
   const [categories, setCategories] = useState([])
   const [error, setError] = useState(null)
@@ -20,14 +29,19 @@ const WorkerFormScreen = ({ navigation, route }) => {
   // Retrieve data from params
   const { IdUser, username } = route.params
 
-  // Retrieve Categories from supabase
+  // Load provinces
+  const provinces = loadProvinces(country)
+
+  // Retrieve Categories from supabase and set initial province
   useEffect(() => {
-    async function loadCategories(){
+    async function loadData(){
       setLoading(true)
       setCategories(await getCategories('name'))
+      setProvince(provinces[0].name)
+      setProvinceCities(loadCities(country, provinces, provinces[0].name))
       setLoading(false)
     }
-    loadCategories()
+    loadData()
   }, [])
 
   // Set the current category to the first fetched category
@@ -39,6 +53,16 @@ const WorkerFormScreen = ({ navigation, route }) => {
     }
     autosetCategory()
   }, [categories])
+
+  // Set the current city to the first loaded
+  useEffect(() => {
+    async function autosetCity(){
+      if (cities.length !== 0){
+        setCity(cities[0])
+      }
+    }
+    autosetCity()
+  }, [cities])
 
 
   // Auxiliary functions to ensure that the user enters valid params
@@ -59,11 +83,19 @@ const WorkerFormScreen = ({ navigation, route }) => {
     setEmployees(cleanInput)
   }
   }
+
+  const handleCityFilterChange = (text) => {
+    // Filter province cities that match the filter
+    const filteredCities = provinceCities.filter(city => city.toLowerCase().includes(text.toLowerCase()))
+    setCities(filteredCities)
+    setFilterCity(text)
+    setCity(filteredCities[0])
+  }
   
   const handleSubmit = async () => {
     setLoading(true)
 
-    if (hourlyPrice === '' || category === '' || attentionHours === '' || employees === '' || city === '' || province === '' || country === '' || description === ''){
+    if (hourlyPrice === '' || category === '' || attentionHours === '' || employees === '' || city === '' || city === undefined || province === '' || country === '' || description === ''){
       setError(messages.error.form_field_required)
       setLoading(false)
     }
@@ -88,7 +120,7 @@ const WorkerFormScreen = ({ navigation, route }) => {
         const location = unstrucResponse.city + ', ' + unstrucResponse.province + ', ' + unstrucResponse.country
         const lat = unstrucResponse.lat
         const lng = unstrucResponse.lng
-      
+
         const sendData = { category, IdUser, hourlyPrice, attentionHours, username, location, lat, lng, employees, description }
       
         setError(null)
@@ -103,7 +135,7 @@ const WorkerFormScreen = ({ navigation, route }) => {
         const data = await response.json()
       
         setLoading(false)
-      
+        
         if (data.error) {
           setError(data.error)
         }
@@ -121,10 +153,6 @@ const WorkerFormScreen = ({ navigation, route }) => {
     <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
       <ScrollView style={{paddingHorizontal: 25}}>
         
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={{color: '#AD40AF', fontWeight: '700'}}> Volver</Text>
-      </TouchableOpacity>
-
       <Text style={styles.label}>Selecciona tu oficio:</Text>
       <View style={styles.pickerContainer}>
         <Picker
@@ -158,6 +186,8 @@ const WorkerFormScreen = ({ navigation, route }) => {
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
+      {/*
+      FOR NOW THE ONLY AVAILABLE COUNTRY IS ARGENTINA
       <Text>País:</Text>
       <TextInput
         label='country'
@@ -166,25 +196,47 @@ const WorkerFormScreen = ({ navigation, route }) => {
         onChangeText={text => setCountry(text)}
         maxLength={40}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
-      />
+      />*/}
 
-      <Text>Provincia:</Text>
-      <TextInput
-        label='province'
-        placeholder="Provincia de residencia"
-        onChangeText={text => setProvince(text)}
-        maxLength={40}
-        style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
-      />
+      <Text style={styles.label}>Provincia:</Text>
+      <View>
+        <Picker
+          selectedValue={province}
+          onValueChange={(itemValue) => {
+            setProvince(itemValue)  
+            setProvinceCities(loadCities(country, provinces, itemValue))
+            setCities(loadCities(country, provinces, itemValue))
+            setFilterCity('')
+          }}
+          style={styles.picker}
+        >
+          {provinces.map((item) => (
+            <Picker.Item label={item.name} value={item.name} key={item.code} />
+          ))}
+        </Picker>
+      </View>
 
       <Text>Ciudad:</Text>
       <TextInput
         label='city'
-        placeholder="Ciudad de residencia"
-        onChangeText={text => setCity(text)}
+        placeholder="Filtrar ciudades"
+        onChangeText={handleCityFilterChange}
+        value={filterCity}
         maxLength={40}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
+
+      {cities && <View>
+        <Picker
+          selectedValue={city}
+          onValueChange={(itemValue) => {setCity(itemValue)}}
+          style={styles.picker}
+        >
+          {cities.map((item) => (
+            <Picker.Item label={item} value={item} key={item} />
+          ))}
+        </Picker>
+      </View>}
 
       <Text>Número de empleados:</Text>
       <TextInput
@@ -256,6 +308,20 @@ const styles = StyleSheet.create({
   },
   visible: {
     display: 'flex',
+  },
+  cityListContent: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  cityButton: {
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+    marginHorizontal: 10,
+    borderRadius: 8,
+    marginVertical: 4,
+  },
+  cityText: {
+    fontSize: 16,
   },
 })
 
