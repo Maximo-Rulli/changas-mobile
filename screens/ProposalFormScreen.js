@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, ScrollView, Button, TextInput, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native'
+import { Text, View, ScrollView, Button, 
+  TextInput, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
-import {getCategories} from '../actions/getCategories'
+import { getCategories } from '../actions/getCategories'
+import loadProvinces from '../utils/loadProvinces'
+import loadCities from '../utils/loadCities'
 import messages from '../utils/messages'
 
 const ProposalFormScreen = ({ navigation, route }) => {
   const [category, setCategory] = useState('')
   const [budget, setBudget] = useState('')
+
+  // Cities is a variable to store the current province cities, not the selected one
+  const [provinceCities, setProvinceCities] = useState('')
+  const [cities, setCities] = useState('')
   const [city, setCity] = useState('')
+  const [filterCity, setFilterCity] = useState('')
+
   const [province, setProvince] = useState('')
-  const [country, setCountry] = useState('')
+  const [country, setCountry] = useState('Argentina')
   const [description, setDescription] = useState('')
   const [categories, setCategories] = useState([])
   const [error, setError] = useState(null)
@@ -18,11 +27,16 @@ const ProposalFormScreen = ({ navigation, route }) => {
   // Retrieve data from params
   const { IdUser, username } = route.params
 
+  // Load provinces
+  const provinces = loadProvinces(country)
+
   // Retrieve Categories from supabase
   useEffect(() => {
     async function loadCategories(){
       setLoading(true)
       setCategories(await getCategories('name'))
+      setProvince(provinces[0].name)
+      setProvinceCities(loadCities(country, provinces, provinces[0].name))
       setLoading(false)
     }
     loadCategories()
@@ -32,11 +46,21 @@ const ProposalFormScreen = ({ navigation, route }) => {
   useEffect(() => {
     async function autosetCategory(){
       if (categories.length !== 0){
-        setCategory(categories[0].category)
+        setCategory(categories[0].name)
       }
     }
     autosetCategory()
   }, [categories])
+
+  // Set the current city to the first loaded
+  useEffect(() => {
+    async function autosetCity(){
+      if (cities.length !== 0){
+        setCity(cities[0])
+      }
+    }
+    autosetCity()
+  }, [cities])
 
   // Auxiliary functions to ensure that the user enters valid params
   const handleBudgetChange = (text) => {
@@ -46,6 +70,14 @@ const ProposalFormScreen = ({ navigation, route }) => {
     if ((budget > 0 && budget < 1000000) || text === '') {
       setBudget(cleanInput)
     }
+  }
+
+  const handleCityFilterChange = (text) => {
+    // Filter province cities that match the filter
+    const filteredCities = provinceCities.filter(city => city.toLowerCase().includes(text.toLowerCase()))
+    setCities(filteredCities)
+    setFilterCity(text)
+    setCity(filteredCities[0])
   }
   
   const handleSubmit = async () => {
@@ -106,14 +138,10 @@ const ProposalFormScreen = ({ navigation, route }) => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
+    <SafeAreaView style={{flex: 1, justifyContent: 'center', backgroundColor: '#F5F5F5'}}>
       <ScrollView style={{paddingHorizontal: 25}}>
-        
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={{color: '#AD40AF', fontWeight: '700'}}> Volver</Text>
-      </TouchableOpacity>
 
-      <Text style={styles.label}>Indica al tipo de profesional que buscas:</Text>
+      <Text style={styles.label}>Indica el profesional que buscas:</Text>
       <View style={styles.pickerContainer}>
         <Picker
           selectedValue={category}
@@ -137,6 +165,8 @@ const ProposalFormScreen = ({ navigation, route }) => {
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
+      {/*
+      FOR NOW THE ONLY AVAILABLE COUNTRY IS ARGENTINA
       <Text>País:</Text>
       <TextInput
         label='country'
@@ -145,25 +175,47 @@ const ProposalFormScreen = ({ navigation, route }) => {
         onChangeText={text => setCountry(text)}
         maxLength={40}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
-      />
+      />*/}
 
-      <Text>Provincia:</Text>
-      <TextInput
-        label='province'
-        placeholder="Provincia de residencia"
-        onChangeText={text => setProvince(text)}
-        maxLength={40}
-        style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
-      />
+      <Text style={styles.label}>Provincia:</Text>
+      <View>
+        <Picker
+          selectedValue={province}
+          onValueChange={(itemValue) => {
+            setProvince(itemValue)  
+            setProvinceCities(loadCities(country, provinces, itemValue))
+            setCities(loadCities(country, provinces, itemValue))
+            setFilterCity('')
+          }}
+          style={styles.picker}
+        >
+          {provinces.map((item) => (
+            <Picker.Item label={item.name} value={item.name} key={item.code} />
+          ))}
+        </Picker>
+      </View>
 
       <Text>Ciudad:</Text>
       <TextInput
         label='city'
-        placeholder="Ciudad de residencia"
-        onChangeText={text => setCity(text)}
+        placeholder="Filtrar ciudades"
+        onChangeText={handleCityFilterChange}
+        value={filterCity}
         maxLength={40}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
+
+      {cities && <View>
+        <Picker
+          selectedValue={city}
+          onValueChange={(itemValue) => {setCity(itemValue)}}
+          style={styles.picker}
+        >
+          {cities.map((item) => (
+            <Picker.Item label={item} value={item} key={item} />
+          ))}
+        </Picker>
+      </View>}
 
       <Text>Descripción del trabajo:</Text>
       <TextInput
@@ -223,6 +275,20 @@ const styles = StyleSheet.create({
   },
   visible: {
     display: 'flex',
+  },
+  cityListContent: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  cityButton: {
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+    marginHorizontal: 10,
+    borderRadius: 8,
+    marginVertical: 4,
+  },
+  cityText: {
+    fontSize: 16,
   },
 })
 

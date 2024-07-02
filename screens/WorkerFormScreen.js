@@ -48,7 +48,7 @@ const WorkerFormScreen = ({ navigation, route }) => {
   useEffect(() => {
     async function autosetCategory(){
       if (categories.length !== 0){
-        setCategory(categories[0].category)
+        setCategory(categories[0].name)
       }
     }
     autosetCategory()

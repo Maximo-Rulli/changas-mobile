@@ -1,15 +1,12 @@
-import React, { useState } from 'react'
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Button,
-  ScrollView,
-  Alert,
-  StyleSheet
-} from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { SafeAreaView, View, Text,
+  TextInput, TouchableOpacity, Button,
+  ScrollView, Alert, StyleSheet, Platform } from 'react-native'
+import { Picker } from '@react-native-picker/picker'
+import loadProvinces from '../utils/loadProvinces'
+import loadCities from '../utils/loadCities'
+import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
+import formatDate from '../utils/formatDate'
 import messages from '../utils/messages'
 
 const RegisterScreen = ({navigation}) => {
@@ -17,14 +14,16 @@ const RegisterScreen = ({navigation}) => {
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [surname, setSurname] = useState('')
+
+  // Cities is a variable to store the current province cities, not the selected one
+  const [provinceCities, setProvinceCities] = useState('')
+  const [cities, setCities] = useState('')
   const [city, setCity] = useState('')
+  const [filterCity, setFilterCity] = useState('')
+
   const [province, setProvince] = useState('')
-  const [country, setCountry] = useState('')
+  const [country, setCountry] = useState('Argentina')
   const [phone, setPhone] = useState('')
-  const [birth, setBirth] = useState('')
-  const [day, setDay] = useState('')
-  const [month, setMonth] = useState('')
-  const [year, setYear] = useState('')
   const [dni, setDni] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -32,6 +31,61 @@ const RegisterScreen = ({navigation}) => {
   // Get the 18 year old date
   const today = new Date()
   const minBirth = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate())
+  const [birth, setBirth] = useState(formatDate(minBirth.toISOString()))
+  console.log(minBirth.toISOString(), minBirth.toLocaleString())
+  const [showDatePickerIOS, setShowDatePickerIOS] = useState(false)
+
+  // Load provinces
+  const provinces = loadProvinces(country)
+
+  // Retrieve and set initial province
+  useEffect(() => {
+    async function loadData(){
+      setLoading(true)
+      setProvince(provinces[0].name)
+      setProvinceCities(loadCities(country, provinces, provinces[0].name))
+      setLoading(false)
+    }
+    loadData()
+  }, [])
+
+
+  // Set the current city to the first loaded
+  useEffect(() => {
+    async function autosetCity(){
+      if (cities.length !== 0){
+        setCity(cities[0])
+      }
+    }
+    autosetCity()
+  }, [cities])
+
+
+  // Auxiliary function for filtering cities
+  const handleCityFilterChange = (text) => {
+    // Filter province cities that match the filter
+    const filteredCities = provinceCities.filter(city => city.toLowerCase().includes(text.toLowerCase()))
+    setCities(filteredCities)
+    setFilterCity(text)
+    setCity(filteredCities[0])
+  }
+
+  const onDateChange = (_, selectedDate) => {
+    setBirth(selectedDate)
+  }
+
+  // Define DatePicker for Android (imperative API)
+  const showDatepickerAndroid = () => {
+    DateTimePickerAndroid.open({
+      value: birth,
+      onChange: onDateChange,
+      mode: 'date',
+      is24Hour: true,
+      maximumDate: minBirth,
+    })
+  }
+
+
 
   const handleLogin = async () => {
     try {
@@ -108,47 +162,6 @@ const RegisterScreen = ({navigation}) => {
     }
   }
 
-  const handleDayChange = (text) => {
-    if (/^\d{0,2}$/.test(text)) {
-      if (text === '' || (text.length <= 2 && parseInt(text, 10) >= 1 && parseInt(text, 10) <= 31)) {
-        setDay(text)
-      } else if (text === '0'){
-        setDay('')
-      }
-    }
-  }
-
-  const handleDayBlur = () => {
-    if (day.length === 1) {
-      setDay(`0${day}`)
-    }
-    handleDateBlur()
-  }
-
-
-  const handleMonthChange = (text) => {
-    if (/^\d{0,2}$/.test(text)) {
-      if (text === '' || (text.length <= 2 && parseInt(text, 10) >= 1 && parseInt(text, 10) <= 12)) {
-        setMonth(text)
-      } 
-      else if (text === '0'){
-        setMonth('')
-      }
-    }
-  }
-
-  const handleMonthBlur = () => {
-    if (month.length === 1) {
-      setMonth(`0${month}`)
-    }
-    handleDateBlur()
-  }
-
-  const handleDateBlur = () => {
-    if (day.length === 2 && month.length === 2  && year.length === 4){
-      setBirth(new Date(`${year}-${month}-${day}`))
-    }
-  }
 
 
   return (
@@ -205,24 +218,8 @@ const RegisterScreen = ({navigation}) => {
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
-      <Text>Ciudad:</Text>
-      <TextInput
-        label='city'
-        placeholder="Ciudad de residencia"
-        onChangeText={text => setCity(text)}
-        maxLength={40}
-        style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
-      />
-
-      <Text>Provincia:</Text>
-      <TextInput
-        label='province'
-        placeholder="Provincia de residencia"
-        onChangeText={text => setProvince(text)}
-        maxLength={40}
-        style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
-      />
-
+      {/*
+      FOR NOW THE ONLY AVAILABLE COUNTRY IS ARGENTINA
       <Text>País:</Text>
       <TextInput
         label='country'
@@ -231,38 +228,72 @@ const RegisterScreen = ({navigation}) => {
         onChangeText={text => setCountry(text)}
         maxLength={40}
         style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
+      />*/}
+
+      <Text style={styles.label}>Provincia:</Text>
+      <View>
+        <Picker
+          selectedValue={province}
+          onValueChange={(itemValue) => {
+            setProvince(itemValue)  
+            setProvinceCities(loadCities(country, provinces, itemValue))
+            setCities(loadCities(country, provinces, itemValue))
+            setFilterCity('')
+          }}
+          style={styles.picker}
+        >
+          {provinces.map((item) => (
+            <Picker.Item label={item.name} value={item.name} key={item.code} />
+          ))}
+        </Picker>
+      </View>
+
+      <Text>Ciudad:</Text>
+      <TextInput
+        label='city'
+        placeholder="Filtrar ciudades"
+        onChangeText={handleCityFilterChange}
+        value={filterCity}
+        maxLength={40}
+        style={{borderWidth: 1, borderColor: '#000', padding: 10, marginBottom: 10}}
       />
 
+      {cities && <View>
+        <Picker
+          selectedValue={city}
+          onValueChange={(itemValue) => {setCity(itemValue)}}
+          style={styles.picker}
+        >
+          {cities.map((item) => (
+            <Picker.Item label={item} value={item} key={item} />
+          ))}
+        </Picker>
+      </View>}
+
       <Text>Fecha de nacimiento:</Text>
-      <View style={styles.row}>
-        <TextInput
-          value={day}
-          placeholder='Día'
-          onChangeText={handleDayChange}
-          onBlur={handleDayBlur}
-          style={styles.input}
-          keyboardType='numeric'
-          maxLength={2}
-        />
-        <TextInput
-          value={month}
-          placeholder='Mes'
-          onChangeText={handleMonthChange}
-          onBlur={handleMonthBlur}
-          style={styles.input}
-          keyboardType='numeric'
-          maxLength={2}
-        />
-        <TextInput
-          value={year}
-          placeholder='Año'
-          onChangeText={text => setYear(text)}
-          onBlur={handleDateBlur}
-          style={styles.input}
-          keyboardType='numeric'
-          maxLength={4}
-        />
+      {
+      Platform.OS === 'android' ? (
+        // In Android we must use the imperative API
+        <View>
+          <Button onPress={showDatepickerAndroid} title="Elegir fecha" />
+          <Text>{birth.toLocaleString().slice(0, 10)}</Text>
+        </View>)
+      :
+      (
+      // In IOS we may opt for the non imperative API
+      <View>
+        <Button onPress={() => {setShowDatePickerIOS(true)}} title="Elegir fecha" />
+        {showDatePickerIOS && <DateTimePicker
+          value={birth}
+          mode={'date'}
+          is24Hour={true}
+          onChange={onDateChange}
+          maximumDate={minBirth}
+        />}
+        <Text>{birth.toLocaleString().slice(0, 10)}</Text>
       </View>
+      )
+      }
 
       <Text>DNI (sin puntos ni comas):</Text>
       <TextInput

@@ -55,7 +55,7 @@ const CategoriesScreen = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor: '#F5F5F5'}}>
       {categories && 
         <FlatList
           data={categories}
